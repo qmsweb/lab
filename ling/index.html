@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اللسانيات</title>
+  <title>روافد وثائقي</title>
 
   <!-- خطوط -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
@@ -31,6 +31,39 @@
       min-height: 100vh;
       padding-top: 80px;
       overflow-x: hidden;
+    }
+
+    /* ======= التوب بار المدمج ======= */
+    .topbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 70px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+
+    .topbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar .logo img {
+      height: 42px;
+      border-radius: 8px;
+    }
+
+    .topbar .logo span {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
     }
 
     /* ======= السلايدر ======= */
@@ -147,11 +180,19 @@
       .hero-content img { width: 130px; }
       .movies-list { gap: 12px; }
       .movie-item { width: 220px; }
+      .topbar .logo span { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- توب بار مدمج -->
+  <div class="topbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="روافد">
+      <span>روافد الوثائقية</span>
+    </div>
+  </div>
 
   <!-- السلايدر -->
   <div class="hero-slider" id="hero-slider">
@@ -170,7 +211,6 @@
     <div class="movies-list" id="movies-list"></div>
   </section>
 
-
   <script>
     const heroSlider = document.getElementById("hero-slider");
     const heroLogo = document.getElementById("hero-logo");
@@ -185,14 +225,7 @@
       .then(slides => {
         if (slides.length > 0) {
           setHero(slides[0]);
-          // يمكن جعل السلايدر يدور تلقائيًا لاحقًا
         }
-        // عند النقر على زر عرض الفيلم
-        watchBtn.addEventListener("click", () => {
-          if (currentMovie && currentMovie.link) {
-            window.location.href = currentMovie.link;
-          }
-        });
       })
       .catch(err => console.error("فشل تحميل slider.json:", err));
 
@@ -205,27 +238,23 @@
     }
 
     // تحميل قائمة الأفلام
-fetch("/ling/data/movies.json")
-  .then(res => res.json())
-  .then(movies => {
-    movies.forEach(movie => {
-      const item = document.createElement("div");
-      item.className = "movie-item";
-      item.innerHTML = `
-        <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
-        <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
-      `;
-      // عند النقر على الفيلم يفتح صفحة المشغل
-      item.addEventListener("click", () => {
-        window.location.href = `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
-      });
-      moviesList.appendChild(item);
-    });
-  })
-  .catch(err => console.error("فشل تحميل movies.json:", err));
-
-
-      });
+    fetch("/ling/data/movies.json")
+      .then(res => res.json())
+      .then(movies => {
+        movies.forEach(movie => {
+          const item = document.createElement("div");
+          item.className = "movie-item";
+          item.innerHTML = `
+            <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
+            <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
+          `;
+          item.addEventListener("click", () => {
+            window.location.href = `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
+          });
+          moviesList.appendChild(item);
+        });
+      })
+      .catch(err => console.error("فشل تحميل movies.json:", err));
   </script>
 </body>
 </html>
