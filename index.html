@@ -12,7 +12,6 @@
 
   <!-- أيقونات -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="topbar.css" />
 
   <style>
     :root {
@@ -153,7 +152,6 @@
 </head>
 <body>
 
-  <div id="topbar-container"></div>
 
   <!-- السلايدر -->
   <div class="hero-slider" id="hero-slider">
@@ -172,7 +170,6 @@
     <div class="movies-list" id="movies-list"></div>
   </section>
 
-  <div id="footer-placeholder"></div>
 
   <script>
     const heroSlider = document.getElementById("hero-slider");
@@ -227,20 +224,7 @@ fetch("/assets/doc/movies.json")
   })
   .catch(err => console.error("فشل تحميل movies.json:", err));
 
-    // تحميل التوب بار والفوتر
-    fetch("topbar.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("topbar-container").innerHTML = html;
-        const script = document.createElement("script");
-        script.src = "topbar.js";
-        document.body.appendChild(script);
-      });
 
-    fetch("/footer.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("footer-placeholder").innerHTML = data;
       });
   </script>
 </body>
