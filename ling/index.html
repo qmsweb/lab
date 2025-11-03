@@ -29,6 +29,7 @@
       background-color: #f4f6fb;
       color: #2d2d2d;
       min-height: 100vh;
+      padding-top: 80px;
       overflow-x: hidden;
     }
 
@@ -38,7 +39,7 @@
       top: 0;
       right: 0;
       width: 100%;
-      height: 80px;
+      height: 70px;
       background: white;
       display: flex;
       align-items: center;
@@ -55,12 +56,12 @@
     }
 
     .topbar .logo img {
-      height: 50px;
+      height: 42px;
       border-radius: 8px;
     }
 
     .topbar .logo span {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--primary-color);
     }
@@ -69,14 +70,13 @@
     .hero-slider {
       position: relative;
       width: 100%;
-      height: 80vh;
+      height: 70vh;
       background-size: cover;
       background-position: center;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      margin-top: 80px;
       transition: background-image 0.8s ease-in-out;
     }
 
@@ -86,25 +86,32 @@
       background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      max-width: 700px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      height: 100%;
-      padding-bottom: 60px;
-    }
+   .hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 700px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* يجعل المحتوى أسفل السلايدر */
+  height: 100%;
+  padding-bottom: 60px; /* لضبط المسافة من الأسفل */
+}
+
+.hero-content img {
+  width: 180px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  align-self: center;
+}
+
 
     .hero-content img {
       width: 180px;
       margin-bottom: 15px;
       border-radius: 10px;
-      align-self: center;
     }
 
     .hero-description {
@@ -122,8 +129,8 @@
       color: #fff;
       border: none;
       border-radius: 10px;
-      padding: 12px 22px;
-      font-size: 1rem;
+      padding: 10px 18px;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
       transition: 0.3s;
@@ -131,7 +138,6 @@
 
     .watch-btn:hover {
       background: #1422a5;
-      transform: translateY(-2px);
     }
 
     /* ======= قائمة الأفلام ======= */
@@ -140,14 +146,6 @@
       margin: 50px auto;
       padding: 0 20px;
       direction: rtl;
-    }
-
-    .section-title {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      color: #333;
-      border-right: 4px solid var(--primary-color);
-      padding-right: 15px;
     }
 
     .movies-list {
@@ -169,12 +167,10 @@
       background-color: #000;
       cursor: pointer;
       transition: transform 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .movie-item:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transform: translateY(-5px);
     }
 
     .movie-bg {
@@ -186,80 +182,19 @@
 
     .movie-logo {
       position: absolute;
-      bottom: 15px;
+      bottom: 10px;
       right: 50%;
       transform: translateX(50%);
       width: 40%;
       border-radius: 6px;
     }
 
-    /* ======= حالة التحميل ======= */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-      font-size: 1.2rem;
-      color: #666;
-    }
-
-    /* ======= التكيف مع الشاشات الصغيرة ======= */
     @media (max-width: 768px) {
-      .topbar {
-        height: 70px;
-        padding: 0 15px;
-      }
-      
-      .topbar .logo img {
-        height: 40px;
-      }
-      
-      .topbar .logo span {
-        font-size: 1.1rem;
-      }
-      
-      .hero-slider {
-        height: 60vh;
-        margin-top: 70px;
-      }
-      
-      .hero-content img {
-        width: 140px;
-      }
-      
-      .movies-list {
-        gap: 12px;
-      }
-      
-      .movie-item {
-        width: 250px;
-      }
-      
-      .section-title {
-        font-size: 1.5rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .movie-item {
-        width: 200px;
-      }
-      
-      .hero-slider {
-        height: 50vh;
-      }
-      
-      .hero-content {
-        padding-bottom: 40px;
-      }
-      
-      .hero-content img {
-        width: 120px;
-      }
-      
-      .hero-description {
-        font-size: 0.9rem;
-      }
+      .hero-slider { height: 55vh; }
+      .hero-content img { width: 130px; }
+      .movies-list { gap: 12px; }
+      .movie-item { width: 220px; }
+      .topbar .logo span { font-size: 1rem; }
     }
   </style>
 </head>
@@ -268,8 +203,7 @@
   <!-- توب بار مدمج -->
   <div class="topbar">
     <div class="logo">
-      <img src="ling-logo-jassim.PNG" alt="شعار اللسانيات">
-      <span>اللسانيات</span>
+      <img src="ling-logo-jassim.PNG" >
     </div>
   </div>
 
@@ -277,7 +211,7 @@
   <div class="hero-slider" id="hero-slider">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <img id="hero-logo" alt="شعار الفيلم">
+      <img id="hero-logo" >
       <p class="hero-description" id="hero-description"></p>
       <button class="watch-btn" id="watch-btn">
         <i class="fas fa-play"></i> شاهد
@@ -287,10 +221,7 @@
 
   <!-- قسم الأفلام -->
   <section class="movies-section">
-    <h2 class="section-title">الأفلام الوثائقية</h2>
-    <div class="movies-list" id="movies-list">
-      <div class="loading">جاري تحميل الأفلام...</div>
-    </div>
+    <div class="movies-list" id="movies-list"></div>
   </section>
 
   <script>
@@ -299,8 +230,9 @@
     const heroDesc = document.getElementById("hero-description");
     const watchBtn = document.getElementById("watch-btn");
     const moviesList = document.getElementById("movies-list");
+    let currentMovie = null;
 
-    // بيانات الافتراضية في حال فشل تحميل JSON
+    // بيانات الافتراضية
     const defaultMovies = [
       {
         "title": "الأمين على الكلمة",
@@ -333,10 +265,11 @@
       });
 
     function setHero(movie) {
+      currentMovie = movie;
       heroSlider.style.backgroundImage = `url('${movie.bg}')`;
       heroLogo.src = movie.logo;
       heroDesc.textContent = movie.desc;
-      watchBtn.onclick = () => window.location.href = movie.url || movie.link || `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
+      watchBtn.onclick = () => window.location.href = movie.url || movie.link;
     }
 
     // تحميل قائمة الأفلام
@@ -355,22 +288,15 @@
       });
 
     function displayMovies(movies) {
-      moviesList.innerHTML = '';
-      
-      if (movies.length === 0) {
-        moviesList.innerHTML = '<div class="loading">لا توجد أفلام متاحة حالياً</div>';
-        return;
-      }
-      
       movies.forEach(movie => {
         const item = document.createElement("div");
         item.className = "movie-item";
         item.innerHTML = `
-          <img class="movie-bg" src="${movie.bg}" alt="${movie.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE2OSIgdmlld0JveD0iMCAwIDMwMCAxNjkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMTY5IiBmaWxsPSIjRjRGNkZCIi8+CjxwYXRoIGQ9Ik0xNTAgODQuNUwxMzcuNSA3MkMxMzcuNSA3MiAxMjAgNTQuNSAxMjAgNjBDMTIwIDY1LjUgMTM3LjUgODQgMTM3LjUgODRIMTUwWiIgZmlsbD0iIzAwOUREOCIvPgo8cGF0aCBkPSJNMTUwIDg0LjVMMTYyLjUgNzJDMTYyLjUgNzIgMTgwIDU0LjUgMTgwIDYwQzE4MCA2NS41IDE2Mi41IDg0IDE2Mi41IDg0SDE1MFoiIGZpbGw9IiMwMDlERDgiLz4KPHBhdGggZD0iTTE1MCA5Ny41TDEzNy41IDExMEMxMzcuNSAxMTAgMTIwIDEyNy41IDEyMCAxMjJDMTIwIDExNi41IDEzNy41IDk4IDEzNy41IDk4SDE1MFoiIGZpbGw9IiMwMDlERDgiLz4KPHBhdGggZD0iTTE1MCA5Ny41TDE2Mi41IDExMEMxNjIuNSAxMTAgMTgwIDEyNy41IDE4MCAxMjJDMTgwIDExNi41IDE2Mi41IDk4IDE2Mi41IDk4SDE1MFoiIGZpbGw9IiMwMDlERDgiLz4KPC9zdmc+'">
+          <img class="movie-bg" src="${movie.bg}" alt="${movie.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE2OSIgdmlld0JveD0iMCAwIDMwMCAxNjkiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMTY5IiBmaWxsPSIjRjRGNkZCIi8+CjxwYXRoIGQ9Ik0xNTAgODQuNUwxMzcuNSA3MkMxMzcuNSA3MiAxMjAgNTQuNSAxMjAgNjBDMTIwIDY1LjUgMTM3LjUgODQgMTM3LjUgODRIMTUwWiIgZmlsbD0iIzAwOUREOCIvPgo8cGF0aCBkPSJNMTUwIDg0LjVMMTYyLjUgNzJDMTYyLjUgNzIgMTgwIDU0LjUgMTgwIDYwQzE4MCA2NS41IDE2Mi41IDg0IDE2Mi41IDg0SDE1MFoiIGZpbGw9IiMwMDlERDgiLz4KPHBhdGggZD0iTTE1MCA5Ny41TDEzNy41IDExMEMxMzcuNSAxMTAgMTIwIDEyNy41IDEyMCAxMjJDMTIwIDExNi41IDEzNy41IDk4IDEzNy41IDk4SDE1MFoiIGZpbGw9IiMwMDlERDgiLz4KPHBhdGggZD0iTTE1MCA5Ny41TDE2Mi41IDExMEMxNjIuNSAxMTAgMTgwIDEyNy41IDEgwIDEyMkMxODAgMTE2LjUgMTYyLjUgOTggMTYyLjUgOThIMTUwWiIgZmlsbD0iIzAwOUREOCIvPgo8L3N2Zz4='">
           <img class="movie-logo" src="${movie.logo}" alt="${movie.title}" onerror="this.style.display='none'">
         `;
         item.addEventListener("click", () => {
-          window.location.href = movie.url || `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
+          window.location.href = `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
         });
         moviesList.appendChild(item);
       });
