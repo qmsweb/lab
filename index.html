@@ -180,7 +180,7 @@
     let currentMovie = null;
 
     // تحميل بيانات السلايدر
-    fetch("/assets/doc/slider.json")
+    fetch("/ling/data/slider.json")
       .then(res => res.json())
       .then(slides => {
         if (slides.length > 0) {
@@ -205,7 +205,7 @@
     }
 
     // تحميل قائمة الأفلام
-fetch("/assets/doc/movies.json")
+fetch("/ling/data/movies.json")
   .then(res => res.json())
   .then(movies => {
     movies.forEach(movie => {
