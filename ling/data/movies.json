@@ -1,11 +1,12 @@
 [
   {
-    "title": "مسيرة سوسير",
-    "logo": "/ling/images/logo-1.png",
-    "bg": "https://www.alfaisalmag.com/wp-content/uploads/2022/03/%D9%85%D9%82%D8%A7%D9%84-%D9%86%D8%A8%D9%8A%D9%84-%D9%85%D9%88%D9%85%D9%8A%D8%AF.jpg",
-    "desc": "نص تجريبي.",
+    "title": "الأمين على الكلمة",
+    "logo": "/images/movies/ameen-logo.PNG",
+    "bg": "/images/movies/ameen-back.PNG",
+    "desc": "سيرة أحمد أمين، الكاتب والمفكر المصري الذي ساهم في النهضة الأدبية والفكرية في القرن العشرين.",
     "id": "ameen",
     "url": "https://firebasestorage.googleapis.com/v0/b/momentschat.appspot.com/o/Rawafid%2Fameen.MOV?alt=media&token=89e02c7e-815f-4b01-92da-263de05c7463",
+    "share-url": "https://rawafid.jassim.one/video/ameen"
   },
   {
     "title": "ظلال الفجر",
