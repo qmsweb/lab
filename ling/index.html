@@ -1,167 +1,250 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>روافد وثائقي</title>
 
+  <!-- خطوط -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
-  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="icon" href="images/favicon.png" type="image/jpg">
 
+  <!-- أيقونات -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
-    :root{ --primary-color:#1a2ac6; }
-    *{ margin:0;padding:0;box-sizing:border-box;font-family:"Noto Kufi Arabic",sans-serif; }
-    body{ background:#f4f6fb;color:#222;min-height:100vh;overflow-x:hidden; }
-
-    /* topbar */
-    .topbar{
-      position:fixed; top:0; left:0; right:0; height:80px;
-      background:rgba(0,0,0,0.25); backdrop-filter:blur(6px);
-      display:flex; align-items:center; justify-content:flex-start;
-      padding:0 24px; z-index:1000;
-    }
-    .topbar-logo img{ height:50px; border-radius:8px; }
-
-    /* hero */
-    .hero-slider{
-      position:relative; width:100%; height:100vh;
-      background-size:cover; background-position:center;
-      display:flex; align-items:center; justify-content:center;
-      transition:background-image .8s ease-in-out;
-    }
-    .hero-overlay{ position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.6), rgba(0,0,0,.25)); }
-    .hero-content{ position:relative; z-index:2; text-align:center; max-width:780px; padding:20px; color:#fff; }
-    .hero-content img{ width:180px; margin-bottom:14px; border-radius:8px; }
-    .hero-description{ font-size:1rem; line-height:1.6; color:#f1f1f1; margin-bottom:16px; }
-    .watch-btn{ display:inline-flex; align-items:center; gap:8px; background:var(--primary-color); color:#fff; border:none; border-radius:10px; padding:10px 18px; font-weight:700; cursor:pointer; }
-
-    /* movies */
-    .movies-section{ max-width:1200px; margin:40px auto; padding:0 18px; direction:rtl; }
-    .movies-list{ display:flex; gap:16px; overflow-x:auto; padding-bottom:12px; }
-    .movie-item{ flex:0 0 auto; width:300px; aspect-ratio:16/9; border-radius:12px; overflow:hidden; position:relative; cursor:pointer; background:#000; transition:transform .25s; }
-    .movie-item:hover{ transform:translateY(-6px); }
-    .movie-bg{ width:100%; height:100%; object-fit:cover; filter:brightness(.75); }
-    .movie-logo{ position:absolute; bottom:10px; right:50%; transform:translateX(50%); width:40%; border-radius:6px; background:rgba(255,255,255,0.02); }
-
-    /* error notice */
-    .data-error{
-      position:fixed; left:16px; bottom:16px; z-index:1500;
-      background:#ffcdd2; color:#660000; padding:12px 14px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.12); font-weight:700;
-      display:none;
+    :root {
+      --primary-color: #1a2ac6;
     }
 
-    @media(max-width:768px){
-      .hero-content img{ width:130px; }
-      .movie-item{ width:220px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Kufi Arabic", sans-serif;
+    }
+
+    body {
+      background-color: #f4f6fb;
+      color: #2d2d2d;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ======= التوب بار ======= */
+    .topbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 70px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 25px;
+      z-index: 1000;
+    }
+
+    .topbar-logo img {
+      height: 45px;
+      border-radius: 8px;
+    }
+
+    /* ======= السلايدر ======= */
+    .hero-slider {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: background-image 0.8s ease-in-out;
+      margin-top: 70px; /* التوب بار مثبت */
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 700px;
+      padding: 20px;
+    }
+
+    .hero-content img {
+      width: 180px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #f1f1f1;
+      margin-bottom: 20px;
+    }
+
+    .watch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .watch-btn:hover {
+      background: #1422a5;
+    }
+
+    /* ======= قائمة الأفلام ======= */
+    .movies-section {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+      direction: rtl;
+    }
+
+    .movies-list {
+      display: flex;
+      flex-direction: row;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
+
+    .movie-item {
+      flex: 0 0 auto;
+      width: 300px;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      background-color: #000;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .movie-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .movie-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75);
+    }
+
+    .movie-logo {
+      position: absolute;
+      bottom: 10px;
+      right: 50%;
+      transform: translateX(50%);
+      width: 40%;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-slider { height: 55vh; }
+      .hero-content img { width: 130px; }
+      .movies-list { gap: 12px; }
+      .movie-item { width: 220px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- التوب بار -->
   <div class="topbar">
-    <div class="topbar-logo"><img src="images/logo.png" alt="شعار روافد"></div>
-  </div>
-
-  <div class="hero-slider" id="hero-slider" role="banner" aria-live="polite">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <img id="hero-logo" alt="">
-      <p class="hero-description" id="hero-description"></p>
-      <button class="watch-btn" id="watch-btn"><i class="fas fa-play"></i>&nbsp;شاهد</button>
+    <div class="topbar-logo">
+      <img src="images/logo.png" alt="شعار روافد">
     </div>
   </div>
 
-  <section class="movies-section" aria-label="قائمة الأفلام">
+  <!-- السلايدر -->
+  <div class="hero-slider" id="hero-slider">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img id="hero-logo">
+      <p class="hero-description" id="hero-description"></p>
+      <button class="watch-btn" id="watch-btn">
+        <i class="fas fa-play"></i> شاهد
+      </button>
+    </div>
+  </div>
+
+  <!-- قسم الأفلام -->
+  <section class="movies-section">
     <div class="movies-list" id="movies-list"></div>
   </section>
 
-  <div class="data-error" id="data-error"></div>
-
   <script>
-    (function(){
-      const sliderPath = './ling/data/slider.json';
-      const moviesPath = './ling/data/movies.json';
+    const heroSlider = document.getElementById("hero-slider");
+    const heroLogo = document.getElementById("hero-logo");
+    const heroDesc = document.getElementById("hero-description");
+    const watchBtn = document.getElementById("watch-btn");
+    const moviesList = document.getElementById("movies-list");
+    let currentMovie = null;
 
-      const heroSlider = document.getElementById('hero-slider');
-      const heroLogo = document.getElementById('hero-logo');
-      const heroDesc = document.getElementById('hero-description');
-      const watchBtn = document.getElementById('watch-btn');
-      const moviesList = document.getElementById('movies-list');
-      const dataError = document.getElementById('data-error');
-
-      function showError(msg){
-        console.error(msg);
-        dataError.textContent = msg;
-        dataError.style.display = 'block';
-        setTimeout(()=> dataError.style.display = 'none', 8000);
-      }
-
-      async function fetchJson(path){
-        try{
-          const res = await fetch(path, {cache:'no-store'});
-          if(!res.ok) throw new Error(`HTTP ${res.status} عند جلب ${path}`);
-          return await res.json();
-        }catch(err){
-          throw new Error(`فشل جلب ${path} — ${err.message}`);
+    // تحميل بيانات السلايدر
+    fetch("/ling/data/slider.json")
+      .then(res => res.json())
+      .then(slides => {
+        if (slides.length > 0) {
+          setHero(slides[0]);
         }
-      }
-
-      function setHero(movie){
-        if(!movie) return;
-        heroSlider.style.backgroundImage = movie.bg ? `url("${movie.bg}")` : '';
-        heroLogo.src = movie.logo || '';
-        heroLogo.alt = movie.title || 'شعار الفيلم';
-        heroDesc.textContent = movie.desc || '';
-        watchBtn.onclick = () => { if(movie.link) window.location.href = movie.link; };
-      }
-
-      function addMovieItem(movie){
-        const item = document.createElement('div');
-        item.className = 'movie-item';
-        item.innerHTML = `
-          <img class="movie-bg" src="${movie.bg||''}" alt="${movie.title||'فيلم'}">
-          <img class="movie-logo" src="${movie.logo||''}" alt="${movie.title||'شعار'}">
-        `;
-        item.addEventListener('click', ()=> {
-          const id = encodeURIComponent(movie.id || movie.title || '');
-          window.location.href = `video.html?id=${id}`;
+        watchBtn.addEventListener("click", () => {
+          if (currentMovie && currentMovie.link) {
+            window.location.href = currentMovie.link;
+          }
         });
-        moviesList.appendChild(item);
-      }
+      })
+      .catch(err => console.error("فشل تحميل slider.json:", err));
 
-      async function init(){
-        try{
-          const slides = await fetchJson(sliderPath);
-          if(!Array.isArray(slides) || slides.length === 0) {
-            showError('ملف slider.json فارغ أو ليس مصفوفة.');
-          } else {
-            setHero(slides[0]);
-          }
-        }catch(err){
-          showError(err.message);
-        }
+    function setHero(movie) {
+      currentMovie = movie;
+      heroSlider.style.backgroundImage = `url('${movie.bg}')`;
+      heroLogo.src = movie.logo;
+      heroDesc.textContent = movie.desc;
+      watchBtn.onclick = () => window.location.href = movie.link;
+    }
 
-        try{
-          const movies = await fetchJson(moviesPath);
-          if(!Array.isArray(movies) || movies.length === 0){
-            showError('ملف movies.json فارغ أو ليس مصفوفة.');
-          } else {
-            movies.forEach(addMovieItem);
-          }
-        }catch(err){
-          showError(err.message);
-        }
-      }
-
-      // تشغيل
-      init();
-
-      // نصيحة مفيدة عند فشل: إذا فتحت الملف بالمتصفح مباشرة (file://)
-      // فاستخدم خادم محلي: python -m http.server أو npx http-server
-    })();
+    // تحميل قائمة الأفلام
+    fetch("/ling/data/movies.json")
+      .then(res => res.json())
+      .then(movies => {
+        movies.forEach(movie => {
+          const item = document.createElement("div");
+          item.className = "movie-item";
+          item.innerHTML = `
+            <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
+            <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
+          `;
+          item.addEventListener("click", () => {
+            window.location.href = `video.html?id=${encodeURIComponent(movie.id || movie.title)}`;
+          });
+          moviesList.appendChild(item);
+        });
+      })
+      .catch(err => console.error("فشل تحميل movies.json:", err));
   </script>
 </body>
 </html>
