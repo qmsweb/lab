@@ -1,102 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8" />
-  <title>تحويل نص إلى PDF</title>
-  <!-- مكتبات لازمة لتحويل HTML إلى PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta charset="UTF-8">
+<title>نص إلى PDF عربي</title>
+
+<!-- مكتبة PDFMake مع دعم العربية -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
 </head>
 <body>
 
-  <h2>أدخل النص ثم اضغط "إنشاء PDF"</h2>
-
-  <!-- مساحة إدخال النص -->
-  <textarea id="sourceText" rows="12" cols="80" placeholder="انسخ أو اكتب النص هنا..."></textarea>
-  <br/><br/>
-  <button id="generateBtn">إنشاء PDF</button>
-  <p id="status" style="color:green"></p>
-
-  <!-- منطقة المعاينة (ستُملأ من النص وتُستخدم لتوليد الـ PDF) -->
-  <div id="printArea" style="display:none; width:800px; direction:rtl; font-family:Arial, sans-serif; line-height:1.35;">
-    <!-- المحتوى يُدرج هنا ديناميكياً -->
-  </div>
+<h3>أدخل النص:</h3>
+<textarea id="txt" rows="10" cols="80"></textarea><br><br>
+<button onclick="makePDF()">إنشاء PDF</button>
 
 <script>
-(function () {
-  const { jsPDF } = window.jspdf;
+function makePDF(){
+    let text = document.getElementById("txt").value;
+    if(!text.trim()){ alert("أدخل نصاً"); return;}
 
-  function splitToParagraphs(text) {
-    // نقسم على فقرات مفصولة بسطرين أو أكثر، ثم نحافظ على فواصل الأسطر المفردة
-    const parts = text.split(/\n{2,}/g).map(p => p.trim()).filter(Boolean);
-    return parts;
-  }
+    // تقسيم الأسطر تلقائيًا ليتعامل مع الطول
+    let paragraphs = text.split("\n").map(l => ({ text:l, margin:[0,4,0,0] }));
 
-  function buildPrintArea(text) {
-    const container = document.getElementById('printArea');
-    container.innerHTML = ''; // تنظيف
-    const paras = splitToParagraphs(text);
+    let doc = {
+        pageSize: 'A4',
+        defaultStyle:{ font:'Helvetica', fontSize:12 },
+        content: paragraphs
+    };
 
-    paras.forEach((p, idx) => {
-      // نحافظ على فواصل الأسطر داخل الفقرة
-      const paragraph = document.createElement('div');
-      paragraph.style.whiteSpace = 'pre-wrap'; // يحترم الأسطر داخل الفقرة
-      paragraph.style.fontSize = '12pt';
-      paragraph.style.margin = '0 0 12px 0';
-      paragraph.textContent = p;
-      container.appendChild(paragraph);
-    });
-    // نُظهر العنصر مؤقتًا ليتم تصويره بواسطة html2canvas (عرض: block)
-    container.style.display = 'block';
-  }
-
-  async function generatePDF() {
-    const text = document.getElementById('sourceText').value.trim();
-    const status = document.getElementById('status');
-    if (!text) {
-      status.style.color = 'crimson';
-      status.textContent = 'أدخل نصاً أولاً.';
-      return;
-    }
-    status.style.color = 'green';
-    status.textContent = 'جارٍ التحويل...';
-
-    buildPrintArea(text);
-    const element = document.getElementById('printArea');
-
-    // إعدادات صفحة A4 (بوحدات نقطة) — سنستخدم jsPDF لتقسيم الصفحات تلقائياً
-    const pdf = new jsPDF({
-      unit: 'pt',
-      format: 'a4',
-      orientation: 'portrait'
-    });
-
-    // هام: doc.html يتعامل مع تقسيم المحتوى عبر صفحات تلقائياً.
-    // نهيئ بعض الخيارات لنتحكم بالهوامش ودقة html2canvas.
-    const marginLeft = 40;
-    const marginTop = 40;
-
-    await pdf.html(element, {
-      x: marginLeft,
-      y: marginTop,
-      html2canvas: {
-        scale: 1.15,       // تحسين دقة النص داخل الصورة
-        useCORS: true
-      },
-      callback: function (doc) {
-        // اسم الملف
-        doc.save('document.pdf');
-        status.textContent = 'تم الإنشاء: تم تنزيل document.pdf';
-        // إخفاء منطقة المعاينة بعد الإنشاء
-        element.style.display = 'none';
-      },
-      // يسمح بالتقسيم التلقائي للصفحات
-      autoPaging: 'text'
-    });
-  }
-
-  document.getElementById('generateBtn').addEventListener('click', generatePDF);
-})();
+    pdfMake.createPdf(doc).download("file.pdf");
+}
 </script>
+
 </body>
 </html>
