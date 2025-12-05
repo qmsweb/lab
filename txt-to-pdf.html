@@ -2,34 +2,48 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>نص إلى PDF عربي</title>
+<title>تحويل نص عربي إلى PDF</title>
 
-<!-- مكتبة PDFMake مع دعم العربية -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script>
+/* تضمين خط عربي يدعم الكتابة العربية */
+pdfMake.fonts = {
+  Amiri: {
+    normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Amiri-Regular.ttf',
+    bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/fonts/Amiri-Bold.ttf'
+  }
+};
+</script>
 
 </head>
 <body>
 
-<h3>أدخل النص:</h3>
-<textarea id="txt" rows="10" cols="80"></textarea><br><br>
-<button onclick="makePDF()">إنشاء PDF</button>
+<h3>أدخل النص العربي:</h3>
+<textarea id="input" rows="10" cols="80"></textarea><br><br>
+<button onclick="generate()">💾 حفظ PDF</button>
 
 <script>
-function makePDF(){
-    let text = document.getElementById("txt").value;
-    if(!text.trim()){ alert("أدخل نصاً"); return;}
+function generate(){
+    let txt = document.getElementById("input").value.trim();
+    if (!txt){ alert("اكتب نصًا أولاً"); return;}
 
-    // تقسيم الأسطر تلقائيًا ليتعامل مع الطول
-    let paragraphs = text.split("\n").map(l => ({ text:l, margin:[0,4,0,0] }));
+    let lines = txt.split("\n").map(line => ({
+        text: line,
+        margin:[0,5,0,0]
+    }));
 
     let doc = {
-        pageSize: 'A4',
-        defaultStyle:{ font:'Helvetica', fontSize:12 },
-        content: paragraphs
+        pageSize:'A4',
+        pageMargins:[40,60,40,40],
+        defaultStyle:{
+            font:'Amiri',
+            fontSize:14,
+            alignment:'right'
+        },
+        content: lines
     };
 
-    pdfMake.createPdf(doc).download("file.pdf");
+    pdfMake.createPdf(doc).download("document.pdf");
 }
 </script>
 
