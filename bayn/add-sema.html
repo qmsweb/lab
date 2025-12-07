@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منشئ الحقول الدلالية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0b6cff;
+            --secondary: #4ecdc4;
+            --danger: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border: #dee2e6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0b6cff 0%, #4ecdc4 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            font-size: 22px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background-color: #0958d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3db8af;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: #e55a5a;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .node-item, .link-item {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+        
+        .link-item {
+            border-left-color: var(--secondary);
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-area {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .preview-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .preview-title h3 {
+            color: var(--primary);
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .type-option {
+            padding: 10px;
+            text-align: center;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .type-option:hover {
+            background-color: #dee2e6;
+        }
+        
+        .type-option.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .color-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 منشئ الحقول الدلالية</h1>
+        <p>أدخل بيانات الحقل الدلالي وقم بتحويلها إلى ملف JSON جاهز للاستخدام</p>
+    </div>
+    
+    <div class="container">
+        <!-- نموذج الإدخال -->
+        <div class="card">
+            <h2>🔧 بيانات الحقل الأساسية</h2>
+            <div class="form-group">
+                <label for="fieldId">معرف الحقل (ID)</label>
+                <input type="text" id="fieldId" class="form-control" placeholder="مثال: 1، 2، 3...">
+            </div>
+            
+            <div class="form-group">
+                <label for="fieldTitle">عنوان الحقل</label>
+                <input type="text" id="fieldTitle" class="form-control" placeholder="مثال: حقل الثورة، حقل العلم...">
+            </div>
+            
+            <div class="form-group">
+                <label for="fieldDescription">وصف الحقل (اختياري)</label>
+                <textarea id="fieldDescription" class="form-control" rows="3" placeholder="وصف مختصر للحقل الدلالي..."></textarea>
+            </div>
+        </div>
+        
+        <!-- معاينة الناتج -->
+        <div class="card">
+            <div class="preview-title">
+                <h2>👁️ معاينة JSON</h2>
+                <button id="copyJson" class="btn btn-secondary btn-small">نسخ JSON</button>
+            </div>
+            <div class="preview-area">
+                <pre id="jsonPreview">{"fields": []}</pre>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="nodeCount">0</div>
+                    <div class="stat-label">عدد العقد</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="linkCount">0</div>
+                    <div class="stat-label">عدد الروابط</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- إدارة العقد -->
+        <div class="card">
+            <h2>🎯 إدارة العقد (Nodes)</h2>
+            <p style="margin-bottom: 15px; color: #666;">أضف العقد التي تمثل المفاهيم في حقل دلالي</p>
+            
+            <div id="nodesContainer">
+                <!-- سيتم إضافة العقد هنا ديناميكيًا -->
+            </div>
+            
+            <button id="addNodeBtn" class="btn btn-secondary">+ إضافة عقدة جديدة</button>
+        </div>
+        
+        <!-- إدارة الروابط -->
+        <div class="card">
+            <h2>🔗 إدارة الروابط (Links)</h2>
+            <p style="margin-bottom: 15px; color: #666;">أضف الروابط التي تربط بين العقد</p>
+            
+            <div id="linksContainer">
+                <!-- سيتم إضافة الروابط هنا ديناميكيًا -->
+            </div>
+            
+            <button id="addLinkBtn" class="btn btn-secondary">+ إضافة رابط جديد</button>
+        </div>
+        
+        <!-- الإجراءات -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>💾 حفظ وتصدير البيانات</h2>
+            
+            <div id="alertSuccess" class="alert alert-success">
+                تم حفظ ملف JSON بنجاح! يمكنك استخدامه الآن في موقع الخريطة.
+            </div>
+            
+            <div id="alertError" class="alert alert-error">
+                حدث خطأ! يرجى التأكد من ملء جميع الحقول المطلوبة.
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                <button id="saveJsonBtn" class="btn">💾 حفظ كملف JSON</button>
+                <button id="resetBtn" class="btn btn-danger">🗑️ مسح الكل</button>
+                <button id="loadExampleBtn" class="btn btn-secondary">📚 تحميل مثال</button>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 15px; background-color: #f0f7ff; border-radius: 8px;">
+                <h3 style="color: var(--primary); margin-bottom: 10px;">💡 كيف تستخدم الملف؟</h3>
+                <p>1. احفظ الملف باسم <code>رقم.json</code> (مثال: <code>1.json</code>)</p>
+                <p>2. ضعه في مجلد <code>data/hqool/</code> بجانب ملف HTML الرئيسي</p>
+                <p>3. افتح الخريطة باستخدام الرابط: <code>index.html?i=رقم</code></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات التطبيق
+        let fieldData = {
+            id: "",
+            title: "",
+            description: "",
+            nodes: [],
+            links: []
+        };
+        
+        // أنواع العقد مع ألوانها
+        const nodeTypes = [
+            { id: 'core', label: 'مركزي', color: '#0b6cff' },
+            { id: 'event', label: 'حدث', color: '#ff6b6b' },
+            { id: 'actor', label: 'فاعل', color: '#4ecdc4' },
+            { id: 'method', label: 'طريقة', color: '#ffd166' },
+            { id: 'emotion', label: 'عاطفة', color: '#9b5de5' },
+            { id: 'result', label: 'نتيجة', color: '#f77f00' }
+        ];
+        
+        // عناصر DOM
+        const fieldIdInput = document.getElementById('fieldId');
+        const fieldTitleInput = document.getElementById('fieldTitle');
+        const fieldDescriptionInput = document.getElementById('fieldDescription');
+        const jsonPreview = document.getElementById('jsonPreview');
+        const nodesContainer = document.getElementById('nodesContainer');
+        const linksContainer = document.getElementById('linksContainer');
+        const addNodeBtn = document.getElementById('addNodeBtn');
+        const addLinkBtn = document.getElementById('addLinkBtn');
+        const saveJsonBtn = document.getElementById('saveJsonBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const copyJsonBtn = document.getElementById('copyJson');
+        const loadExampleBtn = document.getElementById('loadExampleBtn');
+        const alertSuccess = document.getElementById('alertSuccess');
+        const alertError = document.getElementById('alertError');
+        const nodeCountElement = document.getElementById('nodeCount');
+        const linkCountElement = document.getElementById('linkCount');
+        
+        // تحديث المعاينة
+        function updatePreview() {
+            const data = {
+                fields: [{
+                    id: fieldData.id || "1",
+                    title: fieldData.title || "حقل غير معنون",
+                    description: fieldData.description || "",
+                    nodes: fieldData.nodes,
+                    links: fieldData.links
+                }]
+            };
+            
+            jsonPreview.textContent = JSON.stringify(data, null, 2);
+            
+            // تحديث الإحصائيات
+            nodeCountElement.textContent = fieldData.nodes.length;
+            linkCountElement.textContent = fieldData.links.length;
+            
+            // تلوين JSON
+            highlightJSON();
+        }
+        
+        // تلوين JSON للمعاينة
+        function highlightJSON() {
+            const jsonText = jsonPreview.textContent;
+            let highlighted = jsonText
+                .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?)/g, '<span style="color: #98c379;">$1</span>')
+                .replace(/\b(true|false|null)\b/g, '<span style="color: #d19a66;">$1</span>')
+                .replace(/\b(\d+)\b/g, '<span style="color: #d19a66;">$1</span>');
+            
+            jsonPreview.innerHTML = highlighted;
+        }
+        
+        // إضافة عقدة جديدة
+        function addNode() {
+            const nodeId = fieldData.nodes.length > 0 ? 
+                Math.max(...fieldData.nodes.map(n => parseInt(n.id))) + 1 : 1;
+            
+            fieldData.nodes.push({
+                id: nodeId.toString(),
+                label: "",
+                type: "core",
+                size: 12
+            });
+            
+            renderNodes();
+            updatePreview();
+        }
+        
+        // إضافة رابط جديد
+        function addLink() {
+            fieldData.links.push({
+                source: "",
+                target: "",
+                weight: 1
+            });
+            
+            renderLinks();
+            updatePreview();
+        }
+        
+        // عرض العقد
+        function renderNodes() {
+            nodesContainer.innerHTML = "";
+            
+            fieldData.nodes.forEach((node, index) => {
+                const nodeElement = document.createElement('div');
+                nodeElement.className = 'node-item';
+                
+                const nodeType = nodeTypes.find(t => t.id === node.type);
+                const typeColor = nodeType ? nodeType.color : '#0b6cff';
+                
+                nodeElement.innerHTML = `
+                    <button class="remove-btn" onclick="removeNode(${index})">×</button>
+                    <div class="form-group">
+                        <label>معرف العقدة (ID)</label>
+                        <input type="text" class="form-control node-id" value="${node.id}" 
+                               onchange="updateNode(${index}, 'id', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>تسمية العقدة (Label)</label>
+                        <input type="text" class="form-control node-label" value="${node.label}" 
+                               onchange="updateNode(${index}, 'label', this.value)" placeholder="مثال: ثورة، حرية...">
+                    </div>
+                    <div class="form-group">
+                        <label>نوع العقدة</label>
+                        <div class="type-selector">
+                            ${nodeTypes.map(type => `
+                                <div class="type-option ${node.type === type.id ? 'selected' : ''}" 
+                                     onclick="selectNodeType(${index}, '${type.id}')"
+                                     style="${node.type === type.id ? `border: 2px solid ${type.color};` : ''}">
+                                    ${type.label}
+                                    <span class="color-indicator" style="background-color: ${type.color};"></span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>حجم العقدة (Size)</label>
+                        <input type="range" class="form-control" min="8" max="30" value="${node.size || 12}" 
+                               onchange="updateNode(${index}, 'size', parseInt(this.value))">
+                        <div style="text-align: center; margin-top: 5px;">${node.size || 12}px</div>
+                    </div>
+                `;
+                
+                nodesContainer.appendChild(nodeElement);
+            });
+        }
+        
+        // عرض الروابط
+        function renderLinks() {
+            linksContainer.innerHTML = "";
+            
+            fieldData.links.forEach((link, index) => {
+                const linkElement = document.createElement('div');
+                linkElement.className = 'link-item';
+                
+                // إنشاء قائمة العقد المتاحة
+                const nodeOptions = fieldData.nodes.map(node => 
+                    `<option value="${node.id}" ${link.source === node.id ? 'selected' : ''}>${node.id}: ${node.label || 'بدون تسمية'}</option>`
+                ).join('');
+                
+                linkElement.innerHTML = `
+                    <button class="remove-btn" onclick="removeLink(${index})">×</button>
+                    <div class="form-group">
+                        <label>العقدة المصدر (Source)</label>
+                        <select class="form-control link-source" onchange="updateLink(${index}, 'source', this.value)">
+                            <option value="">اختر عقدة مصدر</option>
+                            ${nodeOptions}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>العقدة الهدف (Target)</label>
+                        <select class="form-control link-target" onchange="updateLink(${index}, 'target', this.value)">
+                            <option value="">اختر عقدة هدف</option>
+                            ${nodeOptions}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>قوة الرابط (Weight)</label>
+                        <input type="range" class="form-control" min="1" max="5" value="${link.weight || 1}" 
+                               onchange="updateLink(${index}, 'weight', parseInt(this.value))">
+                        <div style="text-align: center; margin-top: 5px;">${link.weight || 1}</div>
+                    </div>
+                `;
+                
+                linksContainer.appendChild(linkElement);
+            });
+        }
+        
+        // تحديث بيانات العقدة
+        function updateNode(index, property, value) {
+            fieldData.nodes[index][property] = value;
+            updatePreview();
+            renderLinks(); // لإعادة تحميل قوائم العقد في الروابط
+        }
+        
+        // تحديث بيانات الرابط
+        function updateLink(index, property, value) {
+            fieldData.links[index][property] = value;
+            updatePreview();
+        }
+        
+        // تحديد نوع العقدة
+        function selectNodeType(nodeIndex, typeId) {
+            fieldData.nodes[nodeIndex].type = typeId;
+            renderNodes();
+            updatePreview();
+        }
+        
+        // إزالة عقدة
+        function removeNode(index) {
+            // إزالة العقدة
+            const removedNode = fieldData.nodes.splice(index, 1)[0];
+            
+            // إزالة الروابط المرتبطة بهذه العقدة
+            fieldData.links = fieldData.links.filter(link => 
+                link.source !== removedNode.id && link.target !== removedNode.id
+            );
+            
+            renderNodes();
+            renderLinks();
+            updatePreview();
+        }
+        
+        // إزالة رابط
+        function removeLink(index) {
+            fieldData.links.splice(index, 1);
+            renderLinks();
+            updatePreview();
+        }
+        
+        // حفظ البيانات كملف JSON
+        function saveAsJSON() {
+            // التحقق من البيانات الأساسية
+            if (!fieldIdInput.value.trim() || !fieldTitleInput.value.trim()) {
+                showAlert(alertError, "يرجى ملء معرف الحقل وعنوان الحقل");
+                return;
+            }
+            
+            // التحقق من وجود عقد
+            if (fieldData.nodes.length === 0) {
+                showAlert(alertError, "يرجى إضافة عقد واحدة على الأقل");
+                return;
+            }
+            
+            // تحديث بيانات الحقل من حقول الإدخال
+            fieldData.id = fieldIdInput.value.trim();
+            fieldData.title = fieldTitleInput.value.trim();
+            fieldData.description = fieldDescriptionInput.value.trim();
+            
+            // التحقق من أن جميع العقد لها معرف وتسمية
+            for (let node of fieldData.nodes) {
+                if (!node.id.trim()) {
+                    showAlert(alertError, "جميع العقد يجب أن يكون لها معرف");
+                    return;
+                }
+                if (!node.label.trim()) {
+                    showAlert(alertError, `العقدة ${node.id} يجب أن يكون لها تسمية`);
+                    return;
+                }
+            }
+            
+            // التحقق من أن جميع الروابط لها مصدر وهدف
+            for (let link of fieldData.links) {
+                if (!link.source || !link.target) {
+                    showAlert(alertError, "جميع الروابط يجب أن يكون لها مصدر وهدف");
+                    return;
+                }
+            }
+            
+            // إنشاء البيانات النهائية
+            const finalData = {
+                fields: [{
+                    id: fieldData.id,
+                    title: fieldData.title,
+                    description: fieldData.description,
+                    nodes: fieldData.nodes,
+                    links: fieldData.links
+                }]
+            };
+            
+            // تحويل البيانات إلى JSON
+            const jsonData = JSON.stringify(finalData, null, 2);
+            
+            // إنشاء ملف للتنزيل
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${fieldData.id}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showAlert(alertSuccess, `تم حفظ الملف ${fieldData.id}.json بنجاح`);
+        }
+        
+        // نسخ JSON إلى الحافظة
+        function copyToClipboard() {
+            const text = jsonPreview.textContent;
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const originalText = copyJsonBtn.textContent;
+                    copyJsonBtn.textContent = 'تم النسخ!';
+                    setTimeout(() => {
+                        copyJsonBtn.textContent = originalText;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('فشل النسخ: ', err);
+                });
+        }
+        
+        // مسح جميع البيانات
+        function resetAll() {
+            if (confirm("هل أنت متأكد من مسح جميع البيانات؟")) {
+                fieldData = {
+                    id: "",
+                    title: "",
+                    description: "",
+                    nodes: [],
+                    links: []
+                };
+                
+                fieldIdInput.value = "";
+                fieldTitleInput.value = "";
+                fieldDescriptionInput.value = "";
+                
+                renderNodes();
+                renderLinks();
+                updatePreview();
+                
+                showAlert(alertSuccess, "تم مسح جميع البيانات بنجاح");
+            }
+        }
+        
+        // تحميل مثال توضيحي
+        function loadExample() {
+            fieldData = {
+                id: "1",
+                title: "حقل الثورة",
+                description: "حقل دلالي يصف مفاهيم الثورة والتحرر",
+                nodes: [
+                    { id: "1", label: "ثورة", type: "core", size: 20 },
+                    { id: "2", label: "حرية", type: "result", size: 16 },
+                    { id: "3", label: "تغيير", type: "result", size: 14 },
+                    { id: "4", label: "احتجاج", type: "event", size: 12 },
+                    { id: "5", label: "الشعب", type: "actor", size: 16 },
+                    { id: "6", label: "حاكم", type: "actor", size: 12 },
+                    { id: "7", label: "غضب", type: "emotion", size: 10 },
+                    { id: "8", label: "تظاهر", type: "method", size: 12 }
+                ],
+                links: [
+                    { source: "1", target: "2", weight: 3 },
+                    { source: "1", target: "3", weight: 2 },
+                    { source: "1", target: "4", weight: 4 },
+                    { source: "4", target: "5", weight: 3 },
+                    { source: "5", target: "6", weight: 2 },
+                    { source: "5", target: "7", weight: 3 },
+                    { source: "4", target: "8", weight: 2 },
+                    { source: "2", target: "7", weight: 1 }
+                ]
+            };
+            
+            fieldIdInput.value = fieldData.id;
+            fieldTitleInput.value = fieldData.title;
+            fieldDescriptionInput.value = fieldData.description;
+            
+            renderNodes();
+            renderLinks();
+            updatePreview();
+            
+            showAlert(alertSuccess, "تم تحميل المثال التوضيحي بنجاح");
+        }
+        
+        // عرض رسالة تنبيه
+        function showAlert(alertElement, message) {
+            alertElement.textContent = message;
+            alertElement.style.display = 'block';
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // تفاعل مع تغيير حقول الحقل الأساسي
+        fieldIdInput.addEventListener('input', () => {
+            fieldData.id = fieldIdInput.value;
+            updatePreview();
+        });
+        
+        fieldTitleInput.addEventListener('input', () => {
+            fieldData.title = fieldTitleInput.value;
+            updatePreview();
+        });
+        
+        fieldDescriptionInput.addEventListener('input', () => {
+            fieldData.description = fieldDescriptionInput.value;
+            updatePreview();
+        });
+        
+        // إضافة مستمعي الأحداث
+        addNodeBtn.addEventListener('click', addNode);
+        addLinkBtn.addEventListener('click', addLink);
+        saveJsonBtn.addEventListener('click', saveAsJSON);
+        resetBtn.addEventListener('click', resetAll);
+        copyJsonBtn.addEventListener('click', copyToClipboard);
+        loadExampleBtn.addEventListener('click', loadExample);
+        
+        // جعل الدوال متاحة عالميًا
+        window.updateNode = updateNode;
+        window.updateLink = updateLink;
+        window.selectNodeType = selectNodeType;
+        window.removeNode = removeNode;
+        window.removeLink = removeLink;
+        
+        // التهيئة الأولية
+        updatePreview();
+        
+        // إضافة عقدة ووصلة افتراضية عند التحميل
+        setTimeout(() => {
+            addNode();
+            addNode();
+            addLink();
+        }, 100);
+    </script>
+</body>
+</html>
