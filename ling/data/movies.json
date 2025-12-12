@@ -1,8 +1,8 @@
 [
   {
     "title": "نشأة اللسانيات",
-    "logo": "https://lab.jassim.one/ling/images/logo-1.png",
-    "bg": "https://www.alfaisalmag.com/wp-content/uploads/2022/03/%D9%85%D9%82%D8%A7%D9%84-%D9%86%D8%A8%D9%8A%D9%84-%D9%85%D9%88%D9%85%D9%8A%D8%AF.jpg",
+    "logo": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/l1.PNG",
+    "bg": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/b1.PNG",
     "desc": "test.",
     "id": "1",
     "url": "https://firebasestorage.googleapis.com/v0/b/momentschat.appspot.com/o/Linguistics%2Fcopy_4C3C1FCF-F10B-45D3-94FD-2BE10A492642.mov?alt=media&token=1e97fbd6-3053-4a0a-a352-8f3353407998",
@@ -10,8 +10,8 @@
   },
   {
     "title": "اللسانيون العرب",
-    "logo": "https://lab.jassim.one/ling/images/logo-2.png",
-    "bg": "https://cloudfront-eu-central-1.images.arcpublishing.com/atheer/J47TTSKOPFBRLK2ZJ4ELBI43QA.jpeg",
+    "logo": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/l2.PNG",
+    "bg": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/b2.JPEG",
     "desc": "رحلة توثّق فجر النهضة العربية.",
     "id": "dawn",
     "url": "https://firebasestorage.googleapis.com/v0/b/momentschat.appspot.com/o/Linguistics%2F750eb832-44e0-4750-a2d0-f8d120b31924.mp4?alt=media&token=b805a9b6-1ae5-43ab-b9c5-b93db294e75a",
@@ -19,8 +19,8 @@
   },
   {
     "title": "تشومسكي",
-    "logo": "https://lab.jassim.one/ling/images/logo-2.png",
-    "bg": "https://cloudfront-eu-central-1.images.arcpublishing.com/atheer/J47TTSKOPFBRLK2ZJ4ELBI43QA.jpeg",
+    "logo": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/l3.PNG",
+    "bg": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/b3.PNG",
     "desc": "رحلة توثّق فجر النهضة العربية.",
     "id": "dawn",
     "url": "https://firebasestorage.googleapis.com/v0/b/momentschat.appspot.com/o/Linguistics%2F1765565010788225.mov?alt=media&token=e18d2603-d271-4d35-b38b-a666b940c161",
