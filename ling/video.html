@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مشغل الفيديو - ركن اللسانيات</title>
+
+  <!-- خطوط -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.png" type="image/jpg">
+
+  <!-- أيقونات -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary-color: #1a2ac6;
+      --secondary-color: #3a4af0;
+      --text-primary: #2d2d2d;
+      --text-secondary: #555;
+      --bg-color: #f4f6fb;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Kufi Arabic", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ======= التوب بار ======= */
+    .topbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 70px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      z-index: 1000;
+    }
+
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-logo img {
+      height: 45px;
+      border-radius: 8px;
+    }
+
+    .topbar-logo span {
+      font-family: "Baloo Bhaijaan 2", cursive;
+      font-size: 1.4rem;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    /* ======= المحتوى الرئيسي ======= */
+    .video-container {
+      max-width: 1200px;
+      margin: 90px auto 30px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 30px;
+    }
+
+    /* ======= مشغل الفيديو ======= */
+    .video-player-section {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .video-player-wrapper {
+      position: relative;
+      width: 100%;
+      background-color: #000;
+      aspect-ratio: 16/9;
+    }
+
+    .video-player {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .video-info {
+      padding: 20px 25px;
+    }
+
+    .video-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .video-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .video-stats {
+      display: flex;
+      gap: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .video-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .video-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .video-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #f0f2f8;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .video-action-btn:hover {
+      background-color: #e1e5f1;
+    }
+
+    .video-action-btn.like.active {
+      background-color: rgba(26, 42, 198, 0.1);
+      color: var(--primary-color);
+    }
+
+    .video-description {
+      background-color: #f9fafd;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 15px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    /* ======= القائمة الجانبية ======= */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-section {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-title {
+      padding: 18px 20px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .related-videos {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .related-video-item {
+      display: flex;
+      padding: 15px;
+      gap: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .related-video-item:hover {
+      background-color: #f9fafd;
+    }
+
+    .related-video-item:last-child {
+      border-bottom: none;
+    }
+
+    .related-video-thumb {
+      width: 120px;
+      height: 70px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .related-video-info {
+      flex: 1;
+    }
+
+    .related-video-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .related-video-channel {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+
+    .related-video-stats {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    /* ======= قسم التعليقات ======= */
+    .comments-section {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+      padding: 0 20px;
+    }
+
+    .comments-container {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .comment-form {
+      padding: 25px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .comment-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-size: 1rem;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .comment-submit-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .comment-submit-btn:hover {
+      background-color: #1422a5;
+    }
+
+    .comments-list {
+      padding: 20px;
+    }
+
+    .comment-item {
+      display: flex;
+      gap: 15px;
+      padding: 20px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+
+    .comment-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #e1e5f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      flex-shrink: 0;
+    }
+
+    .comment-content {
+      flex: 1;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .comment-author {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .comment-time {
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .comment-text {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .comment-action {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .comment-action:hover {
+      color: var(--primary-color);
+    }
+
+    /* ======= التذييل ======= */
+    .footer {
+      background-color: #1a1a2e;
+      color: #ddd;
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-logo {
+      height: 50px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .footer-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #aaa;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .footer-link:hover {
+      color: var(--secondary-color);
+    }
+
+    .copyright {
+      font-size: 0.85rem;
+      color: #777;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    /* ======= التجاوب ======= */
+    @media (max-width: 992px) {
+      .video-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 0 15px;
+      }
+      
+      .video-container, .comments-section {
+        padding: 0 15px;
+      }
+      
+      .video-title {
+        font-size: 1.4rem;
+      }
+      
+      .video-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .video-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .video-actions {
+        flex-wrap: wrap;
+      }
+      
+      .related-video-item {
+        flex-direction: column;
+      }
+      
+      .related-video-thumb {
+        width: 100%;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- التوب بار -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/logo-ling.png" alt="ركن اللسانيات">
+      <span>ركن اللسانيات</span>
+    </div>
+    <button class="back-btn" id="back-btn">
+      <i class="fas fa-arrow-right"></i> العودة للرئيسية
+    </button>
+  </div>
+
+  <!-- المحتوى الرئيسي -->
+  <main class="video-container">
+    <!-- مشغل الفيديو -->
+    <section class="video-player-section">
+      <div class="video-player-wrapper">
+        <video class="video-player" id="video-player" controls poster="https://images.unsplash.com/photo-1624138784614-87fd1b6528f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+      </div>
+      
+      <div class="video-info">
+        <h1 class="video-title" id="video-title">علم الأصوات اللغوية: مقدمة إلى علم الصوتيات</h1>
+        
+        <div class="video-meta">
+          <div class="video-stats">
+            <span class="video-stat"><i class="far fa-eye"></i> 2.4K مشاهدة</span>
+            <span class="video-stat"><i class="far fa-calendar"></i> 15 مارس 2023</span>
+            <span class="video-stat"><i class="far fa-clock"></i> 25:40 دقيقة</span>
+          </div>
+          
+          <div class="video-actions">
+            <button class="video-action-btn like" id="like-btn">
+              <i class="far fa-thumbs-up"></i> <span id="like-count">124</span>
+            </button>
+            <button class="video-action-btn" id="share-btn">
+              <i class="fas fa-share"></i> مشاركة
+            </button>
+            <button class="video-action-btn" id="save-btn">
+              <i class="far fa-bookmark"></i> حفظ
+            </button>
+          </div>
+        </div>
+        
+        <div class="video-description" id="video-description">
+          <p>في هذا الفيديو، نقدم مقدمة شاملة لعلم الأصوات اللغوية (Phonetics) الذي يدرس الأصوات البشرية وكيفية إنتاجها وخصائصها. سنتعرف على:</p>
+          <ul>
+            <li>أهمية علم الأصوات في دراسة اللغة</li>
+            <li>أجهزة النطق البشرية ووظائفها</li>
+            <li>تصنيف الأصوات اللغوية (صوامت، صوائت)</li>
+            <li>الرموز الصوتية في الأبجدية الصوتية الدولية (IPA)</li>
+            <li>الفرق بين علم الأصوات وعلم الصواتة (Phonology)</li>
+          </ul>
+          <p>هذا الفيديو مناسب لطلاب اللغة العربية واللغويات والمهتمين بدراسة الأصوات اللغوية.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- القائمة الجانبية -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h2 class="sidebar-title"><i class="fas fa-film"></i> فيديوهات ذات صلة</h2>
+        <div class="related-videos" id="related-videos">
+          <!-- سيتم ملؤها بواسطة JavaScript -->
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <h2 class="sidebar-title"><i class="fas fa-info-circle"></i> معلومات المادة</h2>
+        <div class="video-description" style="border: none; margin: 0; padding: 20px;">
+          <p><strong>المادة:</strong> علم الأصوات اللغوية</p>
+          <p><strong>المستوى:</strong> مبتدئ - متوسط</p>
+          <p><strong>المحاضر:</strong> د. أحمد العلي</p>
+          <p><strong>السلسلة:</strong> مقدمة في علوم اللغة (الحلقة 3)</p>
+          <p><strong>اللغة:</strong> العربية الفصحى</p>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- قسم التعليقات -->
+  <section class="comments-section">
+    <div class="comments-container">
+      <div class="comment-form">
+        <textarea class="comment-input" id="comment-input" placeholder="اكتب تعليقك هنا..."></textarea>
+        <button class="comment-submit-btn" id="comment-submit-btn">إضافة تعليق</button>
+      </div>
+      
+      <div class="comments-list" id="comments-list">
+        <!-- سيتم ملؤها بواسطة JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- التذييل -->
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/logo-ling.png" alt="ركن اللسانيات" class="footer-logo">
+      <p class="footer-text">ركن اللسانيات هو منصة تعليمية تهدف إلى نشر المعرفة اللغوية واللسانية باللغة العربية، من خلال فيديوهات تعليمية ومقالات متخصصة تغطي مختلف فروع علم اللغة.</p>
+      
+      <div class="footer-links">
+        <a href="#" class="footer-link">الرئيسية</a>
+        <a href="#" class="footer-link">المكتبة اللسانية</a>
+        <a href="#" class="footer-link">الدورات التعليمية</a>
+        <a href="#" class="footer-link">عن المنصة</a>
+        <a href="#" class="footer-link">اتصل بنا</a>
+      </div>
+      
+      <p class="copyright">© 2023 ركن اللسانيات. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
+
+  <script>
+    // البيانات الأولية
+    const videoData = {
+      id: "phonetics-intro",
+      title: "علم الأصوات اللغوية: مقدمة إلى علم الصوتيات",
+      description: "في هذا الفيديو، نقدم مقدمة شاملة لعلم الأصوات اللغوية (Phonetics) الذي يدرس الأصوات البشرية وكيفية إنتاجها وخصائصها.",
+      views: 2400,
+      date: "15 مارس 2023",
+      duration: "25:40",
+      likes: 124,
+      liked: false,
+      saved: false
+    };
+
+    const relatedVideos = [
+      {
+        id: "phonology-basics",
+        title: "علم الصواتة: المبادئ الأساسية",
+        channel: "ركن اللسانيات",
+        thumbnail: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        duration: "18:22",
+        views: "1.8K"
+      },
+      {
+        id: "arabic-phonetics",
+        title: "الأصوات في اللغة العربية",
+        channel: "ركن اللسانيات",
+        thumbnail: "https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&auto=format&fit=crop&w-400&q=80",
+        duration: "32:15",
+        views: "3.2K"
+      },
+      {
+        id: "morphology-intro",
+        title: "علم الصرف: مدخل إلى تحليل الكلمات",
+        channel: "ركن اللسانيات",
+        thumbnail: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        duration: "22:45",
+        views: "1.5K"
+      },
+      {
+        id: "syntax-theory",
+        title: "النظرية النحوية في اللسانيات",
+        channel: "ركن اللسانيات",
+        thumbnail: "https://images.unsplash.com/photo-1456513080510-34450937d8f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        duration: "28:30",
+        views: "2.1K"
+      }
+    ];
+
+    const sampleComments = [
+      {
+        id: 1,
+        author: "محمد أحمد",
+        time: "قبل يومين",
+        text: "شرح رائع ومبسط. أشكركم على هذه السلسلة القيمة.",
+        likes: 12,
+        liked: false
+      },
+      {
+        id: 2,
+        author: "سارة التونسي",
+        time: "قبل 5 أيام",
+        text: "أتمنى لو تقدمون المزيد من الأمثلة التوضيحية عن الأصوات في اللهجات العربية المختلفة.",
+        likes: 8,
+        liked: true
+      },
+      {
+        id: 3,
+        author: "علي الكرمي",
+        time: "قبل أسبوع",
+        text: "في الدقيقة 12:20، هل يمكن توضيح الفرق بين الصوتين /ق/ و /ك/ في اللهجات العربية؟",
+        likes: 5,
+        liked: false
+      }
+    ];
+
+    // عناصر DOM
+    const backBtn = document.getElementById('back-btn');
+    const videoPlayer = document.getElementById('video-player');
+    const videoTitle = document.getElementById('video-title');
+    const videoDescription = document.getElementById('video-description');
+    const likeBtn = document.getElementById('like-btn');
+    const likeCount = document.getElementById('like-count');
+    const shareBtn = document.getElementById('share-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const relatedVideosContainer = document.getElementById('related-videos');
+    const commentInput = document.getElementById('comment-input');
+    const commentSubmitBtn = document.getElementById('comment-submit-btn');
+    const commentsList = document.getElementById('comments-list');
+
+    // تهيئة الصفحة
+    function initPage() {
+      // تعيين بيانات الفيديو
+      videoTitle.textContent = videoData.title;
+      likeCount.textContent = videoData.likes;
+      
+      // تحديث حالة الإعجاب
+      if (videoData.liked) {
+        likeBtn.classList.add('active');
+        likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> <span id="like-count">' + videoData.likes + '</span>';
+      }
+      
+      // تحديث حالة الحفظ
+      if (videoData.saved) {
+        saveBtn.innerHTML = '<i class="fas fa-bookmark"></i> محفوظ';
+      }
+      
+      // تحميل الفيديو ذو الصلة
+      loadRelatedVideos();
+      
+      // تحميل التعليقات
+      loadComments();
+      
+      // الحصول على معرّف الفيديو من URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const videoId = urlParams.get('id');
+      
+      if (videoId) {
+        // هنا يمكن جلب بيانات الفيديو من قاعدة البيانات باستخدام videoId
+        console.log("معرف الفيديو:", videoId);
+      }
+    }
+
+    // تحميل الفيديو ذو الصلة
+    function loadRelatedVideos() {
+      relatedVideosContainer.innerHTML = '';
+      
+      relatedVideos.forEach(video => {
+        const videoItem = document.createElement('div');
+        videoItem.className = 'related-video-item';
+        videoItem.innerHTML = `
+          <img class="related-video-thumb" src="${video.thumbnail}" alt="${video.title}">
+          <div class="related-video-info">
+            <h3 class="related-video-title">${video.title}</h3>
+            <p class="related-video-channel">${video.channel}</p>
+            <p class="related-video-stats">${video.views} مشاهدة • ${video.duration}</p>
+          </div>
+        `;
+        
+        videoItem.addEventListener('click', () => {
+          // هنا يمكن تحميل الفيديو الجديد
+          alert(`سيتم تحميل الفيديو: ${video.title}`);
+        });
+        
+        relatedVideosContainer.appendChild(videoItem);
+      });
+    }
+
+    // تحميل التعليقات
+    function loadComments() {
+      commentsList.innerHTML = '';
+      
+      sampleComments.forEach(comment => {
+        const commentItem = document.createElement('div');
+        commentItem.className = 'comment-item';
+        commentItem.innerHTML = `
+          <div class="comment-avatar">
+            ${comment.author.charAt(0)}
+          </div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${comment.author}</span>
+              <span class="comment-time">${comment.time}</span>
+            </div>
+            <p class="comment-text">${comment.text}</p>
+            <div class="comment-actions">
+              <button class="comment-action like-comment ${comment.liked ? 'active' : ''}" data-id="${comment.id}">
+                <i class="far fa-thumbs-up"></i> <span class="comment-like-count">${comment.likes}</span>
+              </button>
+              <button class="comment-action reply-comment" data-id="${comment.id}">
+                رد
+              </button>
+            </div>
+          </div>
+        `;
+        
+        commentsList.appendChild(commentItem);
+      });
+    }
+
+    // إضافة تعليق جديد
+    function addComment() {
+      const commentText = commentInput.value.trim();
+      
+      if (!commentText) {
+        alert('يرجى كتابة تعليق قبل الإرسال');
+        return;
+      }
+      
+      const newComment = {
+        id: sampleComments.length + 1,
+        author: "مستخدم جديد",
+        time: "الآن",
+        text: commentText,
+        likes: 0,
+        liked: false
+      };
+      
+      sampleComments.unshift(newComment);
+      loadComments();
+      commentInput.value = '';
+      
+      // تمرير سلسلة نصية كمعامل بدلاً من كائن
+      showNotification('تم إضافة تعليقك بنجاح');
+    }
+
+    // عرض إشعار
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: 600;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // معالجة أحداث النقر
+    function setupEventListeners() {
+      // العودة إلى الصفحة الرئيسية
+      backBtn.addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+      
+      // زر الإعجاب
+      likeBtn.addEventListener('click', () => {
+        if (videoData.liked) {
+          videoData.likes--;
+          videoData.liked = false;
+          likeBtn.classList.remove('active');
+          likeBtn.innerHTML = '<i class="far fa-thumbs-up"></i> <span id="like-count">' + videoData.likes + '</span>';
+        } else {
+          videoData.likes++;
+          videoData.liked = true;
+          likeBtn.classList.add('active');
+          likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> <span id="like-count">' + videoData.likes + '</span>';
+        }
+        
+        likeCount.textContent = videoData.likes;
+      });
+      
+      // زر المشاركة
+      shareBtn.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: videoData.title,
+            text: videoData.description,
+            url: window.location.href
+          });
+        } else {
+          // نسخ الرابط إلى الحافظة
+          navigator.clipboard.writeText(window.location.href);
+          showNotification('تم نسخ رابط الفيديو إلى الحافظة');
+        }
+      });
+      
+      // زر الحفظ
+      saveBtn.addEventListener('click', () => {
+        if (videoData.saved) {
+          videoData.saved = false;
+          saveBtn.innerHTML = '<i class="far fa-bookmark"></i> حفظ';
+          showNotification('تم إزالة الفيديو من المحفوظات');
+        } else {
+          videoData.saved = true;
+          saveBtn.innerHTML = '<i class="fas fa-bookmark"></i> محفوظ';
+          showNotification('تم إضافة الفيديو إلى المحفوظات');
+        }
+      });
+      
+      // إضافة تعليق
+      commentSubmitBtn.addEventListener('click', addComment);
+      
+      // إضافة تعليق بالضغط على Enter (مع الاحتفاظ ب Shift لسطر جديد)
+      commentInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          addComment();
+        }
+      });
+      
+      // معالجة الإعجاب على التعليقات (استخدام تفويض الأحداث)
+      commentsList.addEventListener('click', (e) => {
+        if (e.target.closest('.like-comment')) {
+          const likeBtn = e.target.closest('.like-comment');
+          const commentId = parseInt(likeBtn.dataset.id);
+          const comment = sampleComments.find(c => c.id === commentId);
+          
+          if (comment) {
+            if (comment.liked) {
+              comment.likes--;
+              comment.liked = false;
+              likeBtn.classList.remove('active');
+            } else {
+              comment.likes++;
+              comment.liked = true;
+              likeBtn.classList.add('active');
+            }
+            
+            const likeCountEl = likeBtn.querySelector('.comment-like-count');
+            likeCountEl.textContent = comment.likes;
+          }
+        }
+      });
+    }
+
+    // تهيئة الصفحة عند التحميل
+    document.addEventListener('DOMContentLoaded', () => {
+      initPage();
+      setupEventListeners();
+    });
+  </script>
+</body>
+</html>
