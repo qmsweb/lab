@@ -1,16 +1,9 @@
 [
   {
-    "title": "مسيرة سوسير",
-    "logo": "/ling/images/logo-1.png",
-    "bg": "https://www.alfaisalmag.com/wp-content/uploads/2022/03/%D9%85%D9%82%D8%A7%D9%84-%D9%86%D8%A8%D9%8A%D9%84-%D9%85%D9%88%D9%85%D9%8A%D8%AF.jpg",
-    "desc": "نص تجريبي.",
+    "title": "نشأة اللسانيات",
+    "logo": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/l1.PNG",
+    "bg": "https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/movies/b1.PNG",
+    "desc": "فيلم عن نشأة اللسانيات الحديثة",
     "link": "video?id=ameen"
-  },
-  {
-    "title": "الفيلم الثاني",
-    "logo": "/images/movie2-logo.png",
-    "bg": "/images/movie2-bg.jpg",
-    "desc": "رحلة في عالم غامض مليء بالمفاجآت.",
-    "link": "video.html?src=movie2.mp4"
-  }
+  } 
 ]
