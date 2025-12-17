@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة العرض</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* استيراد الخطوط المخصصة */
+        @font-face {
+            font-family: 'Palestine';
+            src: url('/fonts/Palestine.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'TheYearofHandicrafts';
+            src: url('/fonts/TheYearofHandicrafts-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        /* إعدادات عامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'TheYearofHandicrafts', Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        /* العنوان الرئيسي */
+        .main-title {
+            font-family: 'Palestine', sans-serif;
+            font-size: 3.5rem;
+            color: #2c5f2d;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+        }
+        
+        /* الصورة الرئيسية */
+        .main-image-container {
+            margin: 30px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+        
+        /* قسم العناصر */
+        .items-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .item {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding-bottom: 25px;
+        }
+        
+        .item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .item-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .item-content {
+            padding: 25px;
+        }
+        
+        .item-name {
+            font-family: 'Palestine', sans-serif;
+            font-size: 2.2rem;
+            color: #2c5f2d;
+            margin-bottom: 15px;
+        }
+        
+        .item-description {
+            font-size: 1.2rem;
+            color: #555;
+            text-align: right;
+            line-height: 1.8;
+        }
+        
+        /* تصميم متجاوب */
+        @media (max-width: 992px) {
+            .main-title {
+                font-size: 3rem;
+            }
+            
+            .items-container {
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .item {
+                max-width: 90%;
+            }
+            
+            .item-name {
+                font-size: 1.9rem;
+            }
+            
+            .item-description {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            body {
+                padding: 15px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+            
+            .main-image-container {
+                margin: 20px 0;
+            }
+            
+            .items-container {
+                margin-top: 30px;
+                gap: 25px;
+            }
+            
+            .item {
+                max-width: 100%;
+            }
+            
+            .item-image {
+                height: 200px;
+            }
+            
+            .item-content {
+                padding: 20px;
+            }
+            
+            .item-name {
+                font-size: 1.7rem;
+            }
+            
+            .item-description {
+                font-size: 1rem;
+            }
+        }
+        
+        /* رسالة عند عدم تحميل الخطوط */
+        .font-notice {
+            background-color: #fff8e1;
+            border: 1px dashed #ffd54f;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            color: #5d4037;
+            font-size: 0.9rem;
+        }
+        
+        .instructions {
+            background-color: #f0f7ff;
+            border-right: 5px solid #4a90e2;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 10px;
+            text-align: right;
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        .instructions h3 {
+            color: #2c5f2d;
+            margin-bottom: 10px;
+            font-family: 'Palestine', sans-serif;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="main-title">فنون الحرف اليدوية</h1>
+    </header>
+    
+    <main>
+        <div class="main-image-container">
+            <!-- استبدل مسار الصورة بالمسار الصحيح لصورتك PNG -->
+            <img src="https://cdn.pixabay.com/photo/2017/08/02/14/26/window-2572988_1280.png" alt="فنون حرفية" class="main-image">
+        </div>
+        
+        <div class="font-notice">
+            <p><i class="fas fa-info-circle"></i> ملاحظة: هذه الصفحة تستخدم خطوط مخصصة. إذا لم تظهر الخطوط بشكل صحيح، تأكد من وجود الملفات في المسارات التالية:</p>
+            <ul style="text-align: right; margin-top: 10px; padding-right: 20px;">
+                <li>العنوان: https://github.com/qmsweb/lab/raw/main/fonts/Palestine.ttf</li>
+                <li>النص: https://github.com/qmsweb/lab/raw/main/fonts/TheYearofHandicrafts-Regular.otf</li>
+            </ul>
+        </div>
+        
+        <div class="items-container">
+            <!-- العنصر الأول -->
+            <div class="item">
+                <img src="https://cdn.pixabay.com/photo/2017/08/07/14/02/people-2604149_1280.jpg" alt="حرفي يعمل" class="item-image">
+                <div class="item-content">
+                    <h2 class="item-name">النقش على الخشب</h2>
+                    <p class="item-description">
+                        فن النقش على الخشب من أقدم الحرف اليدوية التي تعكس براعة الحرفي ودقته. يتميز هذا الفن بتفاصيله الدقيقة وأنماطه الزخرفية المتنوعة التي تستخدم في تزيين الأثاث والتحف والجدران. يجمع هذا الفن بين الأصالة والحداثة ليعطي لمسة جمالية فريدة.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- العنصر الثاني -->
+            <div class="item">
+                <img src="https://cdn.pixabay.com/photo/2016/11/19/21/01/book-1841294_1280.jpg" alt="تطريز يدوي" class="item-image">
+                <div class="item-content">
+                    <h2 class="item-name">التطريز اليدوي</h2>
+                    <p class="item-description">
+                        فن التطريز اليدوي يمثل تراثاً غنياً بالألوان والرموز الثقافية. يتميز بتنوع الغرز والخيوط المستخدمة، حيث يعبر كل نمط عن هوية منطقة معينة. هذا الفن يحول القماش العادي إلى قطعة فنية تعكس جمال التراث وتطوره عبر العصور.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>تعليمات التخصيص:</h3>
+            <ol style="text-align: right; padding-right: 20px;">
+                <li>لإضافة صورك الخاصة، استبدل مسارات الصور الحالية في السطرين 149 و164</li>
+                <li>لضمان تحميل الخطوط المخصصة، تأكد من وضع ملفات الخطوط في مجلد /fonts/ كما هو محدد</li>
+                <li>يمكنك تغيير الألوان من خلال تعديل قيم الألوان في قسم CSS</li>
+                <li>الصفحة مصممة لتكون متجاوبة مع جميع أحجام الشاشات</li>
+            </ol>
+        </div>
+    </main>
+
+    <script>
+        // إضافة تأثير بسيط للتحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة تأثير ظهور تدريجي للعناصر
+            const items = document.querySelectorAll('.item, .main-image-container, .main-title');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+            
+            // عرض رسالة تحذير إذا لم تكن الخطوط محملة
+            setTimeout(function() {
+                const title = document.querySelector('.main-title');
+                const computedStyle = window.getComputedStyle(title);
+                const fontFamily = computedStyle.fontFamily;
+                
+                // إذا كان الخط الافتراضي هو المستخدم (ليس الخط المخصص)
+                if (!fontFamily.includes('Palestine')) {
+                    const notice = document.querySelector('.font-notice');
+                    notice.style.display = 'block';
+                    notice.innerHTML = '<p><i class="fas fa-exclamation-triangle"></i> <strong>تحذير:</strong> يبدو أن الخط المخصص Palestine.ttf لم يتم تحميله. تأكد من وجود الملف في المسار الصحيح: /fonts/Palestine.ttf</p>';
+                    notice.style.backgroundColor = '#ffebee';
+                    notice.style.borderColor = '#ef5350';
+                    notice.style.color = '#c62828';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
