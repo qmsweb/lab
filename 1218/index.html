@@ -113,6 +113,11 @@
             font-size: 2.2rem;
             color: #2c5f2d;
             margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         
         .item-description {
@@ -120,6 +125,31 @@
             color: #555;
             text-align: right;
             line-height: 1.8;
+            margin-top: 20px;
+        }
+        
+        /* زر التحميل */
+        .download-btn {
+            background-color: #2c5f2d;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'TheYearofHandicrafts', Arial, sans-serif;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-btn:hover {
+            background-color: #1e421f;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn:active {
+            transform: translateY(0);
         }
         
         /* تصميم متجاوب */
@@ -144,10 +174,17 @@
             
             .item-name {
                 font-size: 1.9rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
             
             .item-description {
                 font-size: 1.1rem;
+            }
+            
+            .download-btn {
+                align-self: flex-start;
             }
         }
         
@@ -244,7 +281,9 @@
             <div class="item">
                 <img src="https://www.findarticles.com/wp-content/uploads/2025/10/notebook_lm_logo_enhanced-615x410.png"  class="item-image">
                 <div class="item-content">
-                    <h2 class="item-name">نوت بوك إل أم</h2>
+                    <h2 class="item-name">نوت بوك إل أم
+                        <a class="download-btn" id="download-notebooklm">زر التحميل</a>
+                    </h2>
                     <p class="item-description">
 برنامج مجاني من جوجل                    </p>
                 </div>
@@ -254,7 +293,9 @@
             <div class="item">
                 <img src="https://www.bgr.com/bgr/tech/google-warns-users-not-to-share-personal-information-with-gemini/Google-Gemini.jpg"  class="item-image">
                 <div class="item-content">
-                    <h2 class="item-name">جيمني</h2>
+                    <h2 class="item-name">جيمني
+                        <a class="download-btn" id="download-gemini">زر التحميل</a>
+                    </h2>
                     <p class="item-description">
 نموذج الذكاء الاصطناعي الخاص بشركة جوجل                    </p>
                 </div>
@@ -304,6 +345,90 @@
                     notice.style.color = '#c62828';
                 }
             }, 1000);
+            
+            // دالة للكشف عن نظام التشغيل
+            function detectOS() {
+                const userAgent = window.navigator.userAgent;
+                const platform = window.navigator.platform;
+                
+                if (/Windows/.test(userAgent)) {
+                    return 'windows';
+                } else if (/Mac/.test(platform)) {
+                    return 'mac';
+                } else if (/Linux/.test(platform) && !/Android/.test(userAgent)) {
+                    return 'linux';
+                } else if (/Android/.test(userAgent)) {
+                    return 'android';
+                } else if (/iPhone|iPad|iPod/.test(platform)) {
+                    return 'ios';
+                } else {
+                    return 'unknown';
+                }
+            }
+            
+            // تحديد روابط التحميل حسب نظام التشغيل
+            function setDownloadLinks() {
+                const os = detectOS();
+                
+                // روابط افتراضية حسب نظام التشغيل
+                const links = {
+                    'notebooklm': {
+                        'windows': 'https://example.com/download/notebooklm-windows.exe',
+                        'mac': 'https://example.com/download/notebooklm-mac.dmg',
+                        'linux': 'https://example.com/download/notebooklm-linux.tar.gz',
+                        'android': 'https://play.google.com/store/apps/details?id=com.example.notebooklm',
+                        'ios': 'https://apps.apple.com/app/notebooklm/id123456789',
+                        'unknown': 'https://example.com/download/notebooklm'
+                    },
+                    'gemini': {
+                        'windows': 'https://example.com/download/gemini-windows.exe',
+                        'mac': 'https://example.com/download/gemini-mac.dmg',
+                        'linux': 'https://example.com/download/gemini-linux.tar.gz',
+                        'android': 'https://play.google.com/store/apps/details?id=com.google.gemini',
+                        'ios': 'https://apps.apple.com/app/gemini-ai/id987654321',
+                        'unknown': 'https://example.com/download/gemini'
+                    }
+                };
+                
+                // تعيين الروابط للأزرار
+                const notebooklmBtn = document.getElementById('download-notebooklm');
+                const geminiBtn = document.getElementById('download-gemini');
+                
+                if (notebooklmBtn) {
+                    notebooklmBtn.href = links.notebooklm[os] || links.notebooklm.unknown;
+                    notebooklmBtn.onclick = function(e) {
+                        alert(`سيبدأ تحميل نوت بوك إل أم لنظام ${getOSName(os)}...`);
+                        // يمكن إزالة هذه الرسالة إذا كنت تريد التحميل المباشر
+                    };
+                }
+                
+                if (geminiBtn) {
+                    geminiBtn.href = links.gemini[os] || links.gemini.unknown;
+                    geminiBtn.onclick = function(e) {
+                        alert(`سيبدأ تحميل جيمني لنظام ${getOSName(os)}...`);
+                        // يمكن إزالة هذه الرسالة إذا كنت تريد التحميل المباشر
+                    };
+                }
+                
+                // إضافة رسالة في وحدة التحكم للمطورين
+                console.log(`تم الكشف عن نظام التشغيل: ${os}`);
+            }
+            
+            // دالة للحصول على اسم نظام التشغيل بالعربية
+            function getOSName(os) {
+                const osNames = {
+                    'windows': 'ويندوز',
+                    'mac': 'ماك',
+                    'linux': 'لينكس',
+                    'android': 'أندرويد',
+                    'ios': 'آي أو إس',
+                    'unknown': 'غير معروف'
+                };
+                return osNames[os] || osNames.unknown;
+            }
+            
+            // تعيين الروابط عند تحميل الصفحة
+            setDownloadLinks();
         });
     </script>
 </body>
