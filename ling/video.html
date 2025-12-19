@@ -30,7 +30,7 @@
       overflow-x: hidden;
     }
 
-    /* ======= التوب بار (نفس السابق تماماً) ======= */
+    /* ======= التوب بار ======= */
     .topbar {
       position: fixed;
       top: 0;
@@ -53,29 +53,30 @@
     /* ======= مشغل الفيديو ======= */
     .player-container {
       max-width: 1000px;
-      margin: 100px auto 40px auto; /* مسافة من الأعلى للتوب بار */
+      margin: 100px auto 40px auto;
       padding: 0 20px;
     }
 
     .video-wrapper {
       position: relative;
       width: 100%;
-      padding-bottom: 56.25%; /* نسبة 16:9 */
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
     }
 
-    .video-wrapper iframe, 
-    .video-wrapper video {
-      position: absolute;
-      top: 0;
-      left: 0;
+    /* تنسيق الفيديو ليكون متجاوباً */
+    video {
       width: 100%;
-      height: 100%;
-      border: none;
+      height: auto;
+      max-height: 80vh;
+      display: block;
     }
 
     .video-info h1 {
@@ -90,7 +91,7 @@
       color: #555;
     }
 
-    /* ======= قائمة الأفلام (اقتراحات) ======= */
+    /* ======= قائمة الأفلام ======= */
     .movies-section {
       max-width: 1200px;
       margin: 50px auto;
@@ -123,13 +124,12 @@
       position: relative;
       background-color: #000;
       cursor: pointer;
-      /* تم إزالة أي تأثيرات حركة (Transform/Transition) */
+      /* تم إزالة الحركة كما طلبت */
     }
 
-    /* إزالة تأثير الحركة عند التحويم */
     .movie-item:hover {
-      opacity: 0.9; /* تغيير بسيط في الشفافية فقط للدلالة على التفاعل دون حركة */
-      transform: none; 
+        /* تأثير بسيط للإشارة للتفاعل */
+        opacity: 0.9;
     }
 
     .movie-bg {
@@ -148,16 +148,14 @@
       border-radius: 6px;
     }
 
-    /* رسالة خطأ أو تحميل */
     .status-msg {
-      text-align: center;
-      padding: 50px;
-      font-size: 1.2rem;
-      color: #777;
+      color: #fff;
+      font-size: 1.1rem;
     }
 
     @media (max-width: 768px) {
       .player-container { margin-top: 90px; }
+      .video-wrapper { min-height: 250px; }
       .video-info h1 { font-size: 1.2rem; }
       .movies-list { gap: 12px; }
       .movie-item { width: 220px; }
@@ -196,95 +194,89 @@
     const moviesList = document.getElementById('movies-list');
     const loadingMsg = document.getElementById('loading-msg');
 
-    // الحصول على المعرف من الرابط
+    // الحصول على الـ ID من الرابط
     const urlParams = new URLSearchParams(window.location.search);
     const videoId = urlParams.get('id');
 
-    if (videoId) {
-      loadVideoData(videoId);
-    } else {
-      loadingMsg.textContent = "لم يتم تحديد فيديو للعرض.";
-    }
+    // مسار ملف البيانات
+    const DATABASE_URL = "ling/data/movies.json";
 
-    // دالة جلب بيانات الفيديو الرئيسي (الآلية المطلوبة)
-    function loadVideoData(id) {
-      // استخدام الآلية المطلوبة: /videp?i=id
-      fetch(`/videp?i=${id}`)
+    // دالة التشغيل الرئيسية
+    function initPlayer() {
+        fetch(DATABASE_URL)
         .then(response => {
-          if (!response.ok) throw new Error("Network response was not ok");
-          return response.json();
+            if (!response.ok) throw new Error("فشل الوصول لملف البيانات");
+            return response.json();
         })
         .then(data => {
-            // تحديث الواجهة بالبيانات
-            loadingMsg.style.display = 'none';
-            videoTitle.textContent = data.title || "عنوان الفيديو";
-            videoDesc.textContent = data.desc || data.description || "لا يوجد وصف متاح.";
+            // 1. عرض الفيديو المطلوب
+            const currentMovie = data.find(m => m.id == videoId);
             
-            // إنشاء عنصر الفيديو (YouTube أو مباشر حسب الرابط)
-            // ملاحظة: نفترض أن البيانات العائدة تحتوي على حقل link أو url
-            const videoSrc = data.link || data.url || "";
-            
-            if (videoSrc.includes('youtube') || videoSrc.includes('youtu.be')) {
-                // معالجة روابط يوتيوب لتضمينها
-                const embedUrl = videoSrc.replace("watch?v=", "embed/");
-                videoWrapper.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+            if (currentMovie) {
+                displayVideo(currentMovie);
             } else {
-                // فيديو عادي
-                videoWrapper.innerHTML = `
-                  <video controls autoplay>
-                    <source src="${videoSrc}" type="video/mp4">
-                    متصفحك لا يدعم تشغيل الفيديو.
-                  </video>
-                `;
+                loadingMsg.textContent = "عذراً، لم يتم العثور على الفيديو المطلوب.";
             }
+
+            // 2. بناء القائمة السفلية
+            buildMoviesList(data);
         })
         .catch(err => {
-          console.error("خطأ في جلب بيانات الفيديو:", err);
-          loadingMsg.textContent = "عذراً، حدث خطأ أثناء تحميل الفيديو أو أن الرابط غير متوفر.";
-          
-          // --- (كود احتياطي للعرض فقط في حال عدم وجود السيرفر الفعلي) ---
-          // هذا الجزء يمكنك حذفه إذا كان السيرفر /videp يعمل بالفعل
-          // نحاول البحث في ملف movies.json كبديل للعرض التجريبي
-           fetch("/ling/data/movies.json")
-             .then(r => r.json())
-             .then(list => {
-                const fallbackMovie = list.find(m => (m.id == id || m.title == id));
-                if(fallbackMovie) {
-                   loadingMsg.style.display = 'none';
-                   videoTitle.textContent = fallbackMovie.title;
-                   videoDesc.textContent = fallbackMovie.desc || "مشاهدة ممتعة";
-                   videoWrapper.innerHTML = `<iframe src="${fallbackMovie.link}" allowfullscreen></iframe>`;
-                }
-             });
-          // -------------------------------------------------------------
+            console.error(err);
+            loadingMsg.textContent = "حدث خطأ أثناء تحميل البيانات.";
         });
     }
 
-    // تحميل القائمة السفلية (من الملف الثابت كما في الصفحة السابقة)
-    fetch("/ling/data/movies.json")
-      .then(res => res.json())
-      .then(movies => {
-        movies.forEach(movie => {
-          // استثناء الفيديو المعروض حالياً من القائمة (اختياري)
-          if (movie.id == videoId) return;
+    // دالة عرض الفيديو
+    function displayVideo(movie) {
+        // إخفاء رسالة التحميل
+        loadingMsg.style.display = 'none';
 
-          const item = document.createElement("div");
-          item.className = "movie-item";
-          // استخدام نفس هيكلية البطاقة القديمة
-          item.innerHTML = `
-            <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
-            <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
-          `;
-          
-          // عند النقر يتم الانتقال للصفحة مع تمرير الآيدي
-          item.addEventListener("click", () => {
-            window.location.href = `?id=${encodeURIComponent(movie.id || movie.title)}`;
-          });
-          
-          moviesList.appendChild(item);
+        // تعبئة البيانات النصية
+        videoTitle.textContent = movie.title;
+        videoDesc.textContent = movie.desc;
+
+        // إنشاء مشغل الفيديو
+        // الروابط في json هي ملفات مباشرة (mp4/mov) لذا نستخدم وسم video
+        const videoElement = document.createElement('video');
+        videoElement.controls = true;
+        videoElement.autoplay = true;
+        videoElement.style.width = "100%";
+        
+        // إضافة المصدر
+        const source = document.createElement('source');
+        source.src = movie.url;
+        // تحديد النوع (افتراضي mp4 لضمان التوافق)
+        source.type = movie.url.endsWith('.mov') ? 'video/quicktime' : 'video/mp4';
+        
+        videoElement.appendChild(source);
+        videoWrapper.appendChild(videoElement);
+    }
+
+    // دالة بناء القائمة السفلية
+    function buildMoviesList(movies) {
+        movies.forEach(movie => {
+            // لا تعرض الفيديو الحالي في قائمة الاقتراحات (اختياري)
+            if (movie.id == videoId) return;
+
+            const item = document.createElement("div");
+            item.className = "movie-item";
+            item.innerHTML = `
+                <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
+                <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
+            `;
+            
+            item.addEventListener("click", () => {
+                // إعادة تحميل الصفحة مع المعرف الجديد
+                window.location.href = `?id=${encodeURIComponent(movie.id)}`;
+            });
+            
+            moviesList.appendChild(item);
         });
-      })
-      .catch(err => console.error("فشل تحميل القائمة:", err));
+    }
+
+    // بدء التشغيل
+    initPlayer();
 
   </script>
 </body>
