@@ -1,317 +1,291 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مشغل الفيديو</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* --- إعدادات عامة --- */
-        :root {
-            --primary-color: #3b82f6; /* لون رئيسي */
-            --bg-dark: #0f172a;       /* خلفية داكنة */
-            --bg-card: #1e293b;       /* خلفية العناصر */
-            --text-main: #f8fafc;     /* لون النص الأساسي */
-            --text-sec: #94a3b8;      /* لون النص الثانوي */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مشاهدة الفيديو | ركن اللسانيات</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.png" type="image/jpg">
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-        a { text-decoration: none; color: inherit; }
+  <style>
+    :root {
+      --primary-color: #1a2ac6;
+    }
 
-        /* --- 1. التوب بار (نفس الستايل القديم) --- */
-        /* ملاحظة: استبدل المحتوى الداخلي هنا بكود التوب بار الخاص بك */
-        .top-bar {
-            background-color: var(--bg-card);
-            height: 60px;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        
-        .top-bar .logo { font-weight: bold; font-size: 1.2rem; color: var(--primary-color); }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Kufi Arabic", sans-serif;
+    }
 
-        /* --- تخطيط الصفحة الرئيسية --- */
-        .main-container {
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 350px; /* الفيديو يأخذ المساحة المتبقية، والقائمة الجانبية 350px */
-            gap: 24px;
-        }
+    body {
+      background-color: #f4f6fb;
+      color: #2d2d2d;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        /* --- قسم الفيديو (يمين الشاشة) --- */
-        .video-section {
-            display: flex;
-            flex-direction: column;
-        }
+    /* ======= التوب بار (نفس السابق تماماً) ======= */
+    .topbar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 70px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 25px;
+      z-index: 1000;
+    }
 
-        /* حاوية الفيديو لجعل النسبة 16:9 متجاوبة */
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            background: #000;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
+    .topbar-logo img {
+      height: 45px;
+      border-radius: 8px;
+    }
 
-        .video-wrapper video, .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    /* ======= مشغل الفيديو ======= */
+    .player-container {
+      max-width: 1000px;
+      margin: 100px auto 40px auto; /* مسافة من الأعلى للتوب بار */
+      padding: 0 20px;
+    }
 
-        .video-info {
-            margin-top: 16px;
-            padding: 16px;
-            background-color: var(--bg-card);
-            border-radius: 12px;
-        }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* نسبة 16:9 */
+      background-color: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
 
-        .video-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
+    .video-wrapper iframe, 
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-        .video-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-sec);
-            font-size: 0.9rem;
-            margin-bottom: 16px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 10px;
-        }
+    .video-info h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
 
-        .video-desc {
-            font-size: 1rem;
-            color: #cbd5e1;
-            white-space: pre-line; /* يحترم الأسطر الجديدة */
-        }
+    .video-info p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+    }
 
-        /* --- القائمة الجانبية (مقترحات) --- */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    /* ======= قائمة الأفلام (اقتراحات) ======= */
+    .movies-section {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
 
-        .sidebar-title {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            color: var(--text-sec);
-        }
+    .section-title {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #333;
+      border-right: 4px solid var(--primary-color);
+      padding-right: 10px;
+    }
 
-        .video-card {
-            display: flex;
-            gap: 10px;
-            background-color: transparent; /* بدون خلفية حسب الطلب القديم لتقليل الضوضاء */
-            padding: 8px;
-            border-radius: 8px;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
+    .movies-list {
+      display: flex;
+      flex-direction: row;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
 
-        .video-card:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
+    .movie-item {
+      flex: 0 0 auto;
+      width: 300px;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      background-color: #000;
+      cursor: pointer;
+      /* تم إزالة أي تأثيرات حركة (Transform/Transition) */
+    }
 
-        .card-thumb {
-            width: 140px;
-            height: 80px;
-            background-color: #334155;
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .card-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    /* إزالة تأثير الحركة عند التحويم */
+    .movie-item:hover {
+      opacity: 0.9; /* تغيير بسيط في الشفافية فقط للدلالة على التفاعل دون حركة */
+      transform: none; 
+    }
 
-        .card-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    .movie-bg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75);
+    }
 
-        .card-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
+    .movie-logo {
+      position: absolute;
+      bottom: 10px;
+      right: 50%;
+      transform: translateX(50%);
+      width: 40%;
+      border-radius: 6px;
+    }
 
-        .card-meta {
-            font-size: 0.8rem;
-            color: var(--text-sec);
-        }
+    /* رسالة خطأ أو تحميل */
+    .status-msg {
+      text-align: center;
+      padding: 50px;
+      font-size: 1.2rem;
+      color: #777;
+    }
 
-        /* --- التجاوب مع الجوال (Responsive) --- */
-        @media (max-width: 900px) {
-            .main-container {
-                grid-template-columns: 1fr; /* عمود واحد */
-            }
-            .video-card {
-                /* تحسين شكل الكارت في الموبايل */
-                align-items: flex-start;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .player-container { margin-top: 90px; }
+      .video-info h1 { font-size: 1.2rem; }
+      .movies-list { gap: 12px; }
+      .movie-item { width: 220px; }
+    }
+  </style>
 </head>
 <body>
 
-    <nav class="top-bar">
-        <div class="logo">موقع الفيديو</div>
-        </nav>
+  <div class="topbar">
+    <div class="topbar-logo">
+      <img src="https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/logo-ling.png" alt="شعار">
+    </div>
+  </div>
 
-    <main class="main-container">
-        
-        <section class="video-section">
-            <div class="video-wrapper">
-                <video id="mainPlayer" controls poster="">
-                    <source src="" type="video/mp4">
+  <div class="player-container">
+    <div class="video-wrapper" id="video-wrapper">
+      <div class="status-msg" id="loading-msg">جاري تحميل الفيديو...</div>
+    </div>
+    
+    <div class="video-info">
+      <h1 id="video-title"></h1>
+      <p id="video-desc"></p>
+    </div>
+  </div>
+
+  <section class="movies-section">
+    <h3 class="section-title">فيديوهات قد تعجبك</h3>
+    <div class="movies-list" id="movies-list"></div>
+  </section>
+
+  <script>
+    // العناصر
+    const videoWrapper = document.getElementById('video-wrapper');
+    const videoTitle = document.getElementById('video-title');
+    const videoDesc = document.getElementById('video-desc');
+    const moviesList = document.getElementById('movies-list');
+    const loadingMsg = document.getElementById('loading-msg');
+
+    // الحصول على المعرف من الرابط
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('id');
+
+    if (videoId) {
+      loadVideoData(videoId);
+    } else {
+      loadingMsg.textContent = "لم يتم تحديد فيديو للعرض.";
+    }
+
+    // دالة جلب بيانات الفيديو الرئيسي (الآلية المطلوبة)
+    function loadVideoData(id) {
+      // استخدام الآلية المطلوبة: /videp?i=id
+      fetch(`/videp?i=${id}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
+        .then(data => {
+            // تحديث الواجهة بالبيانات
+            loadingMsg.style.display = 'none';
+            videoTitle.textContent = data.title || "عنوان الفيديو";
+            videoDesc.textContent = data.desc || data.description || "لا يوجد وصف متاح.";
+            
+            // إنشاء عنصر الفيديو (YouTube أو مباشر حسب الرابط)
+            // ملاحظة: نفترض أن البيانات العائدة تحتوي على حقل link أو url
+            const videoSrc = data.link || data.url || "";
+            
+            if (videoSrc.includes('youtube') || videoSrc.includes('youtu.be')) {
+                // معالجة روابط يوتيوب لتضمينها
+                const embedUrl = videoSrc.replace("watch?v=", "embed/");
+                videoWrapper.innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+            } else {
+                // فيديو عادي
+                videoWrapper.innerHTML = `
+                  <video controls autoplay>
+                    <source src="${videoSrc}" type="video/mp4">
                     متصفحك لا يدعم تشغيل الفيديو.
-                </video>
-            </div>
-
-            <div class="video-info">
-                <h1 class="video-title" id="videoTitle">جاري تحميل العنوان...</h1>
-                <div class="video-meta">
-                    <span id="videoViews">0 مشاهدة</span>
-                    <span id="videoDate">--/--/----</span>
-                </div>
-                <p class="video-desc" id="videoDesc">جاري تحميل الوصف...</p>
-            </div>
-        </section>
-
-        <aside class="sidebar">
-            <h3 class="sidebar-title">فيديوهات مقترحة</h3>
-            <div id="relatedVideosList">
-                </div>
-        </aside>
-
-    </main>
-
-    <script>
-        // --- محاكاة قاعدة بيانات الفيديوهات (API Simulation) ---
-        // في الواقع ستجلب هذه البيانات من السيرفر
-        const videosDatabase = [
-            {
-                id: "101",
-                title: "شرح تصميم واجهات المستخدم الحديثة",
-                desc: "في هذا الدرس سنتعلم كيفية بناء واجهات عصرية باستخدام HTML و CSS مع التركيز على تجربة المستخدم.",
-                views: "15,302",
-                date: "20 ديسمبر 2025",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4", // فيديو تجريبي
-                thumb: "https://via.placeholder.com/300x200/3b82f6/ffffff?text=Lesson+101"
-            },
-            {
-                id: "102",
-                title: "مقدمة في لغة جافاسكربت للمبتدئين",
-                desc: "دورة شاملة لتعلم أساسيات البرمجة بلغة الويب الأولى.",
-                views: "8,200",
-                date: "18 ديسمبر 2025",
-                src: "https://www.w3schools.com/html/movie.mp4",
-                thumb: "https://via.placeholder.com/300x200/0f172a/ffffff?text=JS+Intro"
-            },
-            {
-                id: "103",
-                title: "أفضل أدوات التصميم في 2025",
-                desc: "استعراض لأهم الأدوات التي يحتاجها كل مصمم.",
-                views: "50,000",
-                date: "10 ديسمبر 2025",
-                src: "https://www.w3schools.com/html/mov_bbb.mp4",
-                thumb: "https://via.placeholder.com/300x200/1e293b/ffffff?text=Design+Tools"
-            }
-        ];
-
-        // --- الدالة الرئيسية لجلب البيانات وتشغيل الصفحة ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. قراءة المعرف من الرابط (URL Query Parameter)
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoId = urlParams.get('i'); // البحث عن ?i=...
-
-            // 2. البحث عن الفيديو في قاعدة البيانات
-            let currentVideo = videosDatabase.find(v => v.id === videoId);
-
-            // إذا لم يتم العثور على الفيديو أو لم يكن هناك معرف، نعرض الفيديو الأول كافتراضي
-            if (!currentVideo) {
-                currentVideo = videosDatabase[0];
-                console.log("لم يتم تحديد معرف أو المعرف غير صحيح، تم تحميل الفيديو الافتراضي.");
-            }
-
-            // 3. تحديث عناصر الصفحة بالبيانات
-            const player = document.getElementById('mainPlayer');
-            const titleEl = document.getElementById('videoTitle');
-            const descEl = document.getElementById('videoDesc');
-            const viewsEl = document.getElementById('videoViews');
-            const dateEl = document.getElementById('videoDate');
-
-            // تحديث المصدر (Src) والعنوان
-            player.src = currentVideo.src;
-            player.poster = currentVideo.thumb;
-            titleEl.textContent = currentVideo.title;
-            descEl.textContent = currentVideo.desc;
-            viewsEl.textContent = `${currentVideo.views} مشاهدة`;
-            dateEl.textContent = currentVideo.date;
-
-            // تحديث عنوان التبويب في المتصفح
-            document.title = currentVideo.title + " - مشاهدة الفيديو";
-
-            // 4. توليد القائمة الجانبية (ما عدا الفيديو الحالي)
-            const sidebarList = document.getElementById('relatedVideosList');
-            
-            videosDatabase.forEach(video => {
-                // تخطي الفيديو المعروض حالياً
-                if (video.id === currentVideo.id) return;
-
-                // إنشاء عنصر HTML للفيديو المقترح
-                const card = document.createElement('a');
-                card.href = `?i=${video.id}`; // الرابط يقوم بإعادة تحميل الصفحة مع المعرف الجديد
-                card.className = 'video-card';
-                
-                card.innerHTML = `
-                    <div class="card-thumb">
-                        <img src="${video.thumb}" alt="${video.title}">
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">${video.title}</div>
-                        <div class="card-meta">${video.views} مشاهدة • ${video.date}</div>
-                    </div>
+                  </video>
                 `;
-                
-                sidebarList.appendChild(card);
-            });
+            }
+        })
+        .catch(err => {
+          console.error("خطأ في جلب بيانات الفيديو:", err);
+          loadingMsg.textContent = "عذراً، حدث خطأ أثناء تحميل الفيديو أو أن الرابط غير متوفر.";
+          
+          // --- (كود احتياطي للعرض فقط في حال عدم وجود السيرفر الفعلي) ---
+          // هذا الجزء يمكنك حذفه إذا كان السيرفر /videp يعمل بالفعل
+          // نحاول البحث في ملف movies.json كبديل للعرض التجريبي
+           fetch("/ling/data/movies.json")
+             .then(r => r.json())
+             .then(list => {
+                const fallbackMovie = list.find(m => (m.id == id || m.title == id));
+                if(fallbackMovie) {
+                   loadingMsg.style.display = 'none';
+                   videoTitle.textContent = fallbackMovie.title;
+                   videoDesc.textContent = fallbackMovie.desc || "مشاهدة ممتعة";
+                   videoWrapper.innerHTML = `<iframe src="${fallbackMovie.link}" allowfullscreen></iframe>`;
+                }
+             });
+          // -------------------------------------------------------------
         });
-    </script>
+    }
+
+    // تحميل القائمة السفلية (من الملف الثابت كما في الصفحة السابقة)
+    fetch("/ling/data/movies.json")
+      .then(res => res.json())
+      .then(movies => {
+        movies.forEach(movie => {
+          // استثناء الفيديو المعروض حالياً من القائمة (اختياري)
+          if (movie.id == videoId) return;
+
+          const item = document.createElement("div");
+          item.className = "movie-item";
+          // استخدام نفس هيكلية البطاقة القديمة
+          item.innerHTML = `
+            <img class="movie-bg" src="${movie.bg}" alt="${movie.title}">
+            <img class="movie-logo" src="${movie.logo}" alt="${movie.title}">
+          `;
+          
+          // عند النقر يتم الانتقال للصفحة مع تمرير الآيدي
+          item.addEventListener("click", () => {
+            window.location.href = `?id=${encodeURIComponent(movie.id || movie.title)}`;
+          });
+          
+          moviesList.appendChild(item);
+        });
+      })
+      .catch(err => console.error("فشل تحميل القائمة:", err));
+
+  </script>
 </body>
 </html>
