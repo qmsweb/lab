@@ -31,7 +31,7 @@
 
     /* ======= المعلومات ======= */
     .info-container { max-width: 1000px; margin: 20px auto; padding: 0 20px; display: flex; gap: 20px; align-items: flex-start; }
-    .info-logo { width: 100px; border-radius: 10px; background-color:#000 box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .info-logo { width: 100px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .info-text { flex: 1; }
     .info-text h1 { font-size: 1.5rem; color: #000; margin-bottom: 10px; }
     .info-text p { font-size: 1rem; line-height: 1.7; color: #555; }
@@ -47,10 +47,12 @@
     .movie-card img.bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
     .movie-card:hover { opacity: 0.9; }
 
-    /* رسائل الخطأ للتشخيص */
+    /* رسائل الخطأ والتشخيص */
     .status-box { 
         text-align: center; padding: 40px; margin: 20px; 
         background: #fff; border-radius: 8px; border: 1px dashed #ccc; 
+        /* التعديل هنا: إخفاء الصندوق افتراضياً */
+        display: none;
     }
     .error-text { color: red; direction: ltr; font-family: monospace; margin-top: 10px; font-size: 0.9rem; }
 
@@ -102,12 +104,10 @@
 
   <script>
     // === إعدادات هامة ===
-    // استخدام الرابط المطلق المباشر من GitHub لتجنب مشاكل المسارات
     const JSON_URL = "https://raw.githubusercontent.com/qmsweb/lab/main/ling/data/movies.json";
     
     // استخراج المعرف
     const params = new URLSearchParams(window.location.search);
-    // إذا لم يكن هناك ID في الرابط، نستخدم "1" كافتراضي للتجربة
     const movieId = params.get("id"); 
 
     // العناصر
@@ -125,7 +125,7 @@
 
     // التشغيل
     console.log("Starting fetch from:", JSON_URL);
-    els.debug.textContent = "Connecting to: " + JSON_URL;
+    // تم إزالة السطر الذي يطبع الرسالة في الـ debug عند البدء للحفاظ على نظافة الواجهة
 
     fetch(JSON_URL)
       .then(response => {
@@ -137,18 +137,20 @@
       .then(data => {
         console.log("Data loaded:", data);
         
-        // إذا لم يكن هناك ID، اعرض رسالة للمستخدم
+        // إذا لم يكن هناك ID في الرابط
         if (!movieId) {
+            // نظهر الصندوق فقط لعرض الخطأ
+            els.status.style.display = 'block';
             els.status.innerHTML = "⚠️ الرجاء اختيار فيديو من الصفحة الرئيسية.";
             renderSuggestions(data, null);
             return;
         }
 
-        // البحث عن الفيديو (تحويل الأنواع للتأكد من المطابقة)
+        // البحث عن الفيديو
         const movie = data.find(m => String(m.id) === String(movieId));
 
         if (movie) {
-            // إخفاء رسالة التحميل وإظهار المحتوى
+            // إخفاء رسالة التحميل (هي مخفية أصلاً ولكن للتأكيد)
             els.status.style.display = 'none';
             els.info.style.display = 'flex';
 
@@ -159,19 +161,23 @@
             
             // تشغيل الفيديو
             els.source.src = movie.url;
-            els.video.load(); // تحديث المشغل
+            els.video.load(); 
             els.video.play().catch(e => console.log("Auto-play blocked by browser"));
 
             // بناء القائمة السفلية
             renderSuggestions(data, movieId);
 
         } else {
+            // نظهر الصندوق فقط لعرض الخطأ
+            els.status.style.display = 'block';
             els.status.innerHTML = `⚠️ الفيديو رقم (${movieId}) غير موجود في قاعدة البيانات.`;
             renderSuggestions(data, null);
         }
       })
       .catch(err => {
         console.error("Fetch failed:", err);
+        // نظهر الصندوق في حالة وجود خطأ في الاتصال
+        els.status.style.display = 'block';
         els.status.innerHTML = `❌ حدث خطأ في جلب البيانات.<br>تأكد من الاتصال بالإنترنت.`;
         els.debug.textContent = err.message;
       });
