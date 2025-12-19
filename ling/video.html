@@ -22,7 +22,9 @@
       background-color: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       display: flex; align-items: center; padding: 0 25px; z-index: 1000;
     }
-    .topbar-logo img { height: 75px; border-radius: 8px; }
+    .topbar-logo img { height: 75px; border-radius: 8px; transition: opacity 0.3s; }
+    /* إضافة تأثير بسيط عند تمرير الماوس على الشعار */
+    .topbar-logo a:hover img { opacity: 0.8; }
 
     /* ======= المشغل ======= */
     .player-section { width: 100%; background: #000; display: flex; justify-content: center; padding: 20px 0; min-height: 300px; }
@@ -51,7 +53,6 @@
     .status-box { 
         text-align: center; padding: 40px; margin: 20px; 
         background: #fff; border-radius: 8px; border: 1px dashed #ccc; 
-        /* التعديل هنا: إخفاء الصندوق افتراضياً */
         display: none;
     }
     .error-text { color: red; direction: ltr; font-family: monospace; margin-top: 10px; font-size: 0.9rem; }
@@ -67,7 +68,9 @@
 
   <div class="topbar">
     <div class="topbar-logo">
-      <img src="https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/linglogo.png" alt="شعار">
+      <a href="index.html">
+        <img src="https://raw.githubusercontent.com/qmsweb/lab/main/ling/images/linglogo.png" alt="شعار">
+      </a>
     </div>
   </div>
 
@@ -125,7 +128,6 @@
 
     // التشغيل
     console.log("Starting fetch from:", JSON_URL);
-    // تم إزالة السطر الذي يطبع الرسالة في الـ debug عند البدء للحفاظ على نظافة الواجهة
 
     fetch(JSON_URL)
       .then(response => {
@@ -139,7 +141,6 @@
         
         // إذا لم يكن هناك ID في الرابط
         if (!movieId) {
-            // نظهر الصندوق فقط لعرض الخطأ
             els.status.style.display = 'block';
             els.status.innerHTML = "⚠️ الرجاء اختيار فيديو من الصفحة الرئيسية.";
             renderSuggestions(data, null);
@@ -150,7 +151,6 @@
         const movie = data.find(m => String(m.id) === String(movieId));
 
         if (movie) {
-            // إخفاء رسالة التحميل (هي مخفية أصلاً ولكن للتأكيد)
             els.status.style.display = 'none';
             els.info.style.display = 'flex';
 
@@ -168,7 +168,6 @@
             renderSuggestions(data, movieId);
 
         } else {
-            // نظهر الصندوق فقط لعرض الخطأ
             els.status.style.display = 'block';
             els.status.innerHTML = `⚠️ الفيديو رقم (${movieId}) غير موجود في قاعدة البيانات.`;
             renderSuggestions(data, null);
@@ -176,7 +175,6 @@
       })
       .catch(err => {
         console.error("Fetch failed:", err);
-        // نظهر الصندوق في حالة وجود خطأ في الاتصال
         els.status.style.display = 'block';
         els.status.innerHTML = `❌ حدث خطأ في جلب البيانات.<br>تأكد من الاتصال بالإنترنت.`;
         els.debug.textContent = err.message;
