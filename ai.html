@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد Gemini الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --bg-color: #f0f2f5;
+            --chat-bg: #ffffff;
+            --user-msg: #e3f2fd;
+            --ai-msg: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 95%;
+            max-width: 600px;
+            height: 80vh;
+            background: var(--chat-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .api-config {
+            padding: 10px;
+            background: #fff3cd;
+            border-bottom: 1px solid #ffeeba;
+            display: flex;
+            gap: 5px;
+        }
+
+        .api-config input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #chat-window {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-start;
+            background-color: var(--user-msg);
+            color: #0d47a1;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-message {
+            align-self: flex-end;
+            background-color: var(--ai-msg);
+            color: #333;
+            border-bottom-left-radius: 2px;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1557b0;
+        }
+
+        button:disabled {
+            background: #ccc;
+        }
+
+        .loading {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="header">مساعد Gemini الذكي</div>
+    
+    <!-- قسم إدخال الـ API للحماية -->
+    <div class="api-config">
+        <input type="password" id="api-key" placeholder="أدخل مفتاح Google API هنا...">
+        <small style="font-size: 10px; align-self: center;">سيُحفظ محلياً في المتصفح</small>
+    </div>
+
+    <div id="chat-window">
+        <div class="message ai-message">أهلاً بك! كيف يمكنني مساعدتك اليوم؟ (يرجى إدخال مفتاح API بالأعلى للبدء)</div>
+    </div>
+
+    <div class="loading" id="loader" style="padding: 0 20px;">جاري التفكير...</div>
+
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="اكتب سؤالك هنا..." onkeypress="handleKeyPress(event)">
+        <button id="send-btn" onclick="sendMessage()">إرسال</button>
+    </div>
+</div>
+
+<script type="module">
+    // استيراد مكتبة Google AI من الـ CDN
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    // استعادة المفتاح من الذاكرة المحلية إن وجد
+    document.
