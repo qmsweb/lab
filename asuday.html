@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المشاريع | جاسم الفارسي</title>
+    <title>روابط المشاريع | جاسم الفارسي</title>
     
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -54,12 +54,13 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            object-fit: cover;
+            object-fit: contain; /* تم التعديل لضمان ظهور الشعار بالكامل داخل الدائرة */
             border: 3px solid var(--card-border);
             padding: 4px;
-            margin-bottom: 1rem;
-            background-color: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            display: block; /* لضمان التوسيط */
+            margin: 0 auto 1rem auto; /* توسيط دقيق */
+            background-color: #000000; /* خلفية سوداء للشعار كما طلبت */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
         }
 
         h1 {
@@ -113,7 +114,7 @@
             height: 55px;
             border-radius: 12px;
             object-fit: contain;
-            background-color: rgba(255, 255, 255, 0.03); /* خلفية خفيفة جداً للشعارات */
+            background-color: rgba(255, 255, 255, 0.03);
             padding: 5px;
             flex-shrink: 0;
         }
@@ -124,7 +125,6 @@
             text-align: center;
             font-size: 1.15rem;
             font-weight: 600;
-            /* إضافة مسافة لليسار لمعادلة مساحة الصورة في اليمين ويبقى النص في المنتصف تماماً */
             padding-left: 55px; 
         }
 
@@ -158,22 +158,22 @@
 
         <main class="links-wrapper">
             
-            <a href="#" class="link-card">
+            <a href="https://motanabi.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
                 <img src="https://motanabi.jassim.one/assets/images/logo.png" alt="شعار رحلة المتنبي" class="link-icon">
                 <span class="link-text">رحلة المتنبي</span>
             </a>
 
-            <a href="#" class="link-card">
+            <a href="https://rawafid.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
                 <img src="https://rawafid.jassim.one/images/Rawafid-white.png" alt="شعار روافد" class="link-icon">
                 <span class="link-text">روافد</span>
             </a>
 
-            <a href="#" class="link-card">
+            <a href="https://bayn.basirah.me" class="link-card" target="_blank" rel="noopener noreferrer">
                 <img src="https://bayn.basirah.me/images/logo.PNG" alt="شعار بين" class="link-icon">
                 <span class="link-text">بين</span>
             </a>
 
-            <a href="#" class="link-card">
+            <a href="https://sawamet.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
                 <img src="https://sawamet.jassim.one/images/sawamet-logo.png" alt="شعار صوامت" class="link-icon">
                 <span class="link-text">صوامت</span>
             </a>
