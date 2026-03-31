@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المشاريع | جاسم الفارسي</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* إعدادات المتغيرات والألوان */
+        :root {
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        /* الإعدادات العامة للصفحة */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 3rem 1rem;
+        }
+
+        /* حاوية المحتوى (بحد أقصى للعرض لتبدو مثل تطبيق هاتف) */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* تصميم الهيدر (الشعار والنص) */
+        header {
+            margin-bottom: 2.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .main-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--card-border);
+            padding: 4px;
+            margin-bottom: 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        p.description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* حاوية الروابط */
+        .links-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* تصميم أزرار الروابط */
+        .link-card {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .link-card:hover {
+            background-color: var(--card-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* تصميم أيقونات المشاريع */
+        .link-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            object-fit: contain;
+            background-color: rgba(255, 255, 255, 0.03); /* خلفية خفيفة جداً للشعارات */
+            padding: 5px;
+            flex-shrink: 0;
+        }
+
+        /* نص الرابط */
+        .link-text {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 600;
+            /* إضافة مسافة لليسار لمعادلة مساحة الصورة في اليمين ويبقى النص في المنتصف تماماً */
+            padding-left: 55px; 
+        }
+
+        /* حركات الظهور (Animations) */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تذييل الصفحة */
+        footer {
+            margin-top: 3rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <img src="https://rawafid.jassim.one/images/jassim-logo.png" alt="شعار جاسم الفارسي" class="main-logo">
+            <h1>جاسم الفارسي</h1>
+            <p class="description">مشاريع ومنصات تعليمية في علوم اللغة العربية</p>
+        </header>
+
+        <main class="links-wrapper">
+            
+            <a href="#" class="link-card">
+                <img src="https://motanabi.jassim.one/assets/images/logo.png" alt="شعار رحلة المتنبي" class="link-icon">
+                <span class="link-text">رحلة المتنبي</span>
+            </a>
+
+            <a href="#" class="link-card">
+                <img src="https://rawafid.jassim.one/images/Rawafid-white.png" alt="شعار روافد" class="link-icon">
+                <span class="link-text">روافد</span>
+            </a>
+
+            <a href="#" class="link-card">
+                <img src="https://bayn.basirah.me/images/logo.PNG" alt="شعار بين" class="link-icon">
+                <span class="link-text">بين</span>
+            </a>
+
+            <a href="#" class="link-card">
+                <img src="https://sawamet.jassim.one/images/sawamet-logo.png" alt="شعار صوامت" class="link-icon">
+                <span class="link-text">صوامت</span>
+            </a>
+
+        </main>
+
+        <footer>
+            <p>© 2026 جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+</body>
+</html>
