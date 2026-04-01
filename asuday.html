@@ -10,13 +10,14 @@
     <style>
         /* إعدادات المتغيرات والألوان */
         :root {
-            --bg-gradient-start: #0f172a;
-            --bg-gradient-end: #1e293b;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --card-hover: rgba(255, 255, 255, 0.15);
+            --bg-base: #0a0f1c;
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover-bg: rgba(255, 255, 255, 0.08);
+            --card-hover-border: rgba(255, 255, 255, 0.2);
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
+            --shadow-color: rgba(0, 0, 0, 0.25);
         }
 
         /* الإعدادات العامة للصفحة */
@@ -24,49 +25,81 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'IBM Plex Sans Arabic', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-color: var(--bg-base);
+            /* إضافة إضاءة خلفية هادئة تعطي طابعاً احترافياً */
+            background-image: 
+                radial-gradient(circle at top right, rgba(26, 42, 198, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at bottom left, rgba(176, 70, 211, 0.1) 0%, transparent 40%);
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 3rem 1rem;
+            padding: 3rem 1.5rem;
         }
 
-        /* حاوية المحتوى (بحد أقصى للعرض لتبدو مثل تطبيق هاتف) */
+        /* حاوية المحتوى */
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px; /* تصغير طفيف لتبدو متناسقة أكثر على الشاشات الكبيرة */
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
         /* تصميم الهيدر (الشعار والنص) */
         header {
-            margin-bottom: 2.5rem;
-            animation: fadeInDown 0.8s ease;
+            animation: fadeInDown 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* إضافة تأثير توهج (Glow) حول الشعار الرئيسي */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.2rem;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.1);
+            filter: blur(20px);
+            border-radius: 50%;
+            z-index: -1;
         }
 
         .main-logo {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            object-fit: contain; /* تم التعديل لضمان ظهور الشعار بالكامل داخل الدائرة */
-            border: 3px solid var(--card-border);
-            padding: 4px;
-            display: block; /* لضمان التوسيط */
-            margin: 0 auto 1rem auto; /* توسيط دقيق */
-            background-color: #000000; /* خلفية سوداء للشعار كما طلبت */
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            object-fit: contain;
+            border: 2px solid var(--card-border);
+            padding: 5px;
+            background-color: #000000;
+            box-shadow: 0 8px 24px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .main-logo:hover {
+            transform: scale(1.05);
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             letter-spacing: -0.5px;
         }
 
@@ -74,76 +107,86 @@
             font-size: 1rem;
             color: var(--text-secondary);
             font-weight: 400;
+            line-height: 1.5;
         }
 
         /* حاوية الروابط */
         .links-wrapper {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            animation: fadeInUp 0.8s ease;
+            gap: 1rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* تصميم أزرار الروابط */
+        /* تصميم أزرار الروابط (تأثير الزجاج) */
         .link-card {
             display: flex;
             align-items: center;
+            justify-content: center;
+            position: relative;
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 10px 15px;
+            border-radius: 18px;
+            min-height: 70px;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.3s ease;
-            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .link-card:hover {
-            background-color: var(--card-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            border-color: rgba(255, 255, 255, 0.2);
+            background-color: var(--card-hover-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--card-hover-border);
         }
 
         /* تصميم أيقونات المشاريع */
         .link-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 12px;
+            position: absolute;
+            right: 8px; /* تثبيت الأيقونة على اليمين لضمان توسيط النص بشكل مثالي */
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
             object-fit: contain;
-            background-color: rgba(255, 255, 255, 0.03);
-            padding: 5px;
-            flex-shrink: 0;
+            padding: 8px; /* زيادة الحشوة الداخلية ليظهر الشعار بشكل أنيق */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
+
+        /* الألوان المخصصة لخلفيات الشعارات كما تم طلبها */
+        #bg-motanabi { background-color: #D2B58C; }
+        #bg-rawafid { background-color: #1A2AC6; }
+        #bg-bayn { background-color: #000000; }
+        #bg-sawamet { background-color: #B046D3; }
 
         /* نص الرابط */
         .link-text {
-            flex-grow: 1;
-            text-align: center;
             font-size: 1.15rem;
             font-weight: 600;
-            padding-left: 55px; 
+            letter-spacing: -0.2px;
+            padding: 0 20px;
         }
 
         /* حركات الظهور (Animations) */
         @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(-25px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* تذييل الصفحة */
         footer {
-            margin-top: 3rem;
+            margin-top: 1rem;
             font-size: 0.85rem;
             color: var(--text-secondary);
+            animation: fadeInUp 1s ease;
         }
     </style>
 </head>
@@ -151,7 +194,9 @@
 
     <div class="container">
         <header>
-            <img src="https://rawafid.jassim.one/images/jassim-logo.png" alt="شعار جاسم الفارسي" class="main-logo">
+            <div class="logo-container">
+                <img src="https://rawafid.jassim.one/images/jassim-logo.png" alt="شعار جاسم الفارسي" class="main-logo">
+            </div>
             <h1>جاسم الفارسي</h1>
             <p class="description">مشاريع ومنصات تعليمية في علوم اللغة العربية</p>
         </header>
@@ -159,22 +204,22 @@
         <main class="links-wrapper">
             
             <a href="https://motanabi.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
-                <img src="https://motanabi.jassim.one/assets/images/logo.png" alt="شعار رحلة المتنبي" class="link-icon">
+                <img src="https://motanabi.jassim.one/assets/images/logo.png" alt="شعار رحلة المتنبي" class="link-icon" id="bg-motanabi">
                 <span class="link-text">رحلة المتنبي</span>
             </a>
 
             <a href="https://rawafid.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
-                <img src="https://rawafid.jassim.one/images/Rawafid-white.png" alt="شعار روافد" class="link-icon">
+                <img src="https://rawafid.jassim.one/images/Rawafid-white.png" alt="شعار روافد" class="link-icon" id="bg-rawafid">
                 <span class="link-text">روافد</span>
             </a>
 
             <a href="https://bayn.basirah.me" class="link-card" target="_blank" rel="noopener noreferrer">
-                <img src="https://bayn.basirah.me/images/logo.PNG" alt="شعار بين" class="link-icon">
+                <img src="https://bayn.basirah.me/images/logo.PNG" alt="شعار بين" class="link-icon" id="bg-bayn">
                 <span class="link-text">بين</span>
             </a>
 
             <a href="https://sawamet.jassim.one" class="link-card" target="_blank" rel="noopener noreferrer">
-                <img src="https://sawamet.jassim.one/images/sawamet-logo.png" alt="شعار صوامت" class="link-icon">
+                <img src="https://sawamet.jassim.one/images/sawamet-logo.png" alt="شعار صوامت" class="link-icon" id="bg-sawamet">
                 <span class="link-text">صوامت</span>
             </a>
 
