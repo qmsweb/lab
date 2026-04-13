@@ -1,0 +1,38 @@
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* استجابة للشاشات الصغيرة */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .number { font-size: 2rem; }
+            .time-box { min-width: 70px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>العيد في البلاغة العربية</h1>
+
+    
+    <div id="countdown" class="countdown">
+        <div class="time-box">
+            <span class="number" id="days">00</span>
+            <span class="label">يوم</span>
+        </div>
+        <div class="time-box">
+            <span class="number" id="hours">00</span>
+            <span class="label">ساعة</span>
+        </div>
+        <div class="time-box">
+            <span class="number" id="minutes">00</span>
+            <span class="label">دقيقة</span>
+        </div>
+        <div class="time-box">
+            <span class="number" id="seconds">00</span>
+            <span class="label">ثانية</span>
